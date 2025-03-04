@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-
 export function SignUp() {
   const [name, setName] = useState<string>("");
   const [username, setUsername] = useState<string>("");

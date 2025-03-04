@@ -1,21 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import "./../style/progress-tracking.css";
+import "./../style/filter.css";
 
 // TODO: this must be located in a database
-// Template => Tile | Authors | Tags | Status | Date
-import { researchList, ResearchItem } from "./utils/ResearchList";
+// Template => Tile | Authors | Tags | Status | Date | Citations
+import { Proposal, proposalList } from "./ProposalList";
 
 // -----------------------------
 // Filter Section
 // -----------------------------
 
-function FilterData(
-  searchTerm: string,
-  filterType: string,
-  data: ResearchItem[]
-) {
+function FilterData(searchTerm: string, filterType: string, data: Proposal[]) {
   // Filter for text
   const FilterText = (text: string, searchTerm: string) => {
     return text.toLowerCase().includes(searchTerm.toLowerCase());
@@ -31,45 +27,45 @@ function FilterData(
   };
 
   // Filter for date
-  const FilterDate = (date: Date, searchTerm: string) => {
-    const dateString = date.toISOString().split("T")[0];
-    return dateString.includes(searchTerm);
+  const FilterDate = (date: string, searchTerm: string) => {
+    return date.includes(searchTerm);
   };
 
   // Map filter types to corresponding filter functions
   const filterFunctions: {
-    [key: string]: (research: ResearchItem, searchTerm: string) => boolean;
+    [key: string]: (proposal: Proposal, searchTerm: string) => boolean;
   } = {
-    title: (research, searchTerm) => FilterText(research.title, searchTerm),
-    authors: (research, searchTerm) =>
-      FilterArrayText(research.authors.split(","), searchTerm),
-    tags: (research, searchTerm) =>
-      FilterArrayText(research.tags.split(","), searchTerm),
-    status: (research, searchTerm) => FilterText(research.status, searchTerm),
-    date: (research, searchTerm) => FilterDate(research.date, searchTerm),
+    title: (proposal, searchTerm) => FilterText(proposal.title, searchTerm),
+    authors: (proposal, searchTerm) =>
+      FilterArrayText(proposal.authors.split(","), searchTerm),
+    tags: (proposal, searchTerm) =>
+      FilterArrayText(proposal.tags.split(","), searchTerm),
+    date: (proposal, searchTerm) => FilterDate(proposal.date.toISOString(), searchTerm),
   };
 
   const filterFunction = filterFunctions[filterType];
   return filterFunction
-    ? data.filter((research) => filterFunction(research, searchTerm))
+    ? data.filter((proposal) => filterFunction(proposal, searchTerm))
     : [];
 }
 
 // -----------------------------
 
-export function ProgressTracking() {
+export function ProposalFilter() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filterType, setFilterType] = useState<string>("title");
   const navigate = useNavigate();
 
   const handleTitleClick = (id: number) => {
-    navigate(`/research-dashboard/${id}`);
+    navigate(`/proposal-review/${id}`);
   };
 
   const filteredData = FilterData(
     searchTerm,
     filterType,
-    researchList.sort((a, b) => b.citations - a.citations)
+    proposalList.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    )
   );
 
   return (
@@ -91,7 +87,6 @@ export function ProgressTracking() {
           <option value="title">Title</option>
           <option value="authors">Authors</option>
           <option value="tags">Tags</option>
-          <option value="status">Status</option>
           <option value="date">Date</option>
         </select>
       </div>
@@ -108,16 +103,16 @@ export function ProgressTracking() {
         </thead>
         <tbody>
           {filteredData.length > 0 ? (
-            filteredData.map((research) => (
+            filteredData.map((proposal) => (
               <tr
-                key={research.id}
-                onClick={() => handleTitleClick(research.id)}
-                className="button-research"
+                key={proposal.title}
+                onClick={() => handleTitleClick(proposal.id)}
+                className="button-proposal"
               >
-                <td>{research.title}</td>
-                <td>{research.authors}</td>
+                <td>{proposal.title}</td>
+                <td>{proposal.authors}</td>
                 <td>
-                  {research.tags.split(",").map((tag, index) => (
+                  {proposal.tags.split(",").map((tag, index) => (
                     <button
                       key={index}
                       className="btn btn-outline-primary btn-sm me-2 mb-2"
@@ -126,14 +121,14 @@ export function ProgressTracking() {
                     </button>
                   ))}
                 </td>
-                <td>{research.status}</td>
-                <td>{research.date.toISOString().split("T")[0]}</td>
-                <td>{research.citations}</td>
+                <td>Under Review</td>
+                <td>{proposal.date.toISOString().split("T")[0]}</td>
+                <td>{proposal.citations}</td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan={5}>No matching research found.</td>
+              <td colSpan={4}>No matching proposals found.</td>
             </tr>
           )}
         </tbody>

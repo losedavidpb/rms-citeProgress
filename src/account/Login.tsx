@@ -2,10 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-
 // TODO: Replace this with backend handling
-import { accountList } from "./utils/AccountList";
+import { accountList } from "./AccountList";
 
 export function Login() {
   const [username, setUsername] = useState<string>("");
@@ -28,7 +26,7 @@ export function Login() {
 
     // Redirect to appropriate page
     setError("");
-    navigate("/progress-tracking");
+    navigate("/available-research");
   };
 
   return (

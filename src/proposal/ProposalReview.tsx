@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 // TODO: this must be located in a database
-import { researchList, ResearchItem } from "./utils/ResearchList";
+import { proposalList, Proposal } from "./ProposalList";
 
-export function ResearchDashboard() {
+export function ProposalReview() {
   const [error, setError] = useState<string>("");
-  const [research, setResearch] = useState<ResearchItem | undefined>(undefined);
+  const [proposal, setProposal] = useState<Proposal | undefined>(undefined);
   const { id } = useParams<{ id: string }>();
 
   const navigate = useNavigate();
@@ -16,68 +16,68 @@ export function ResearchDashboard() {
 
   useEffect(() => {
     // Check if the id is a number
-    if (isNaN(numericId) || numericId < 0 || numericId > researchList.length) {
-      setError("Invalid research id");
-      setResearch(undefined);
+    if (isNaN(numericId) || numericId < 0 || numericId > proposalList.length) {
+      setError("Invalid proposal id");
+      setProposal(undefined);
       return;
     }
 
-    // Check if the research exists
-    let foundResearch = undefined;
+    // Check if the proposal exists
+    let foundproposal = undefined;
 
-    for (const researchItem of researchList) {
-      if (researchItem.id === numericId) {
-        foundResearch = researchItem;
+    for (const Proposal of proposalList) {
+      if (Proposal.id === numericId) {
+        foundproposal = Proposal;
         break;
       }
     }
 
-    if (!foundResearch) {
-      setError("Research not found");
+    if (!foundproposal) {
+      setError("proposal not found");
       return;
     }
 
     setError("");
-    setResearch(foundResearch);
+    setProposal(foundproposal);
   }, [numericId]);
 
   return (
     <div className="container my-5">
-      <h1 className="text-center mb-4">Research Dashboard</h1>
+      <h1 className="text-center mb-4">Review Proposal</h1>
 
       {error && <div className="alert alert-danger">{error}</div>}
 
-      {research ? (
+      {proposal ? (
         <div className="card">
           <div className="card-body">
             {/* Title */}
             <div className="d-flex align-items-center">
-              <h3 className="fw-bold mb-4">{research.title}</h3>
+              <h3 className="fw-bold mb-4">{proposal.title}</h3>
             </div>
 
             {/* Authors and Date */}
             <div className="d-flex align-items-center">
               <p className="mb-0">
-                <strong>Authors:</strong> {research.authors}
+                <strong>Authors:</strong> {proposal.authors}
               </p>
               <p className="text-muted mb-0 ms-3">
-                ({research.date.toISOString().split("T")[0]})
+                ({proposal.date.toISOString().split("T")[0]})
               </p>
             </div>
 
             {/* Status and Citations */}
             <div className="d-flex align-items-center mt-4">
               <p className="mb-0">
-                <strong>Status:</strong> {research.status}
+                <strong>Status:</strong> Under Review
               </p>
               <p className="text-muted mb-0 ms-3">
-                ({research.citations} citations)
+                ({proposal.citations} citations)
               </p>
             </div>
 
             {/* Tags */}
             <div className="d-flex align-items-center mt-3">
-              {research.tags.split(",").map((tag, index) => (
+              {proposal.tags.split(",").map((tag, index) => (
                 <button
                   key={index}
                   className="btn btn-outline-primary btn-sm me-2 mb-2"
@@ -93,19 +93,17 @@ export function ResearchDashboard() {
             </div>
 
             <div className="d-flex align-items-center">
-              <p className="mb-0">{research.description}</p>
+              <p className="mb-0">{proposal.description}</p>
             </div>
           </div>
-          <button
-            className="btn btn-outline-primary"
-            onClick={() => navigate(-1)}
-          >
-            Back
+
+          <button className="btn btn-primary mt-3" onClick={() => navigate("/give-feedback")}>
+            Give Feedback
           </button>
         </div>
       ) : (
         <div className="alert alert-warning mt-3">
-          No research found or invalid ID.
+          No proposal found or invalid ID.
         </div>
       )}
     </div>

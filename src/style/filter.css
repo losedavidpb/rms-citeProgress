@@ -37,3 +37,26 @@
 .button-research:focus {
     outline: none;
 }
+
+.button-proposal {
+    border-radius: 8px;
+    border: none;
+    padding: 0.6em 1.2em;
+    background: none;
+    transition: color 0.25s, text-decoration 0.25s;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    max-width: 1280px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.button-proposal:hover {
+    text-decoration: underline;
+}
+
+.button-proposal:focus {
+    outline: none;
+}
