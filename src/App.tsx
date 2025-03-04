@@ -1,16 +1,11 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 
-function App() {
-  const [count, setCount] = useState(0)
+import "./style/index.css";
+import Home from './components/Home'
 
-  return (
-    <>
-      <h1>Welcome to CiteProgress!</h1>
-    </>
-  )
-}
-
-export default App
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <Home />
+  </StrictMode>
+);

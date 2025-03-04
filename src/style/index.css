@@ -1,3 +1,7 @@
+/***************************************************
+    CSS Style for App.tsx
+****************************************************/
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -35,6 +39,27 @@ h1 {
   line-height: 1.1;
 }
 
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background-color: #000000;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 20px;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -45,10 +70,16 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
 }
+
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
