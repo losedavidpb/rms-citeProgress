@@ -1,0 +1,41 @@
+/***************************************************
+    CSS Style for ProgressTracking.tsx
+****************************************************/
+
+.search-container {
+    margin-bottom: 10px;
+}
+
+.search-input {
+    width: 85%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-right: 15px;
+}
+
+.search-select {
+    padding: 8px;
+}
+
+.button-research {
+    border-radius: 8px;
+    border: none;
+    padding: 0.6em 1.2em;
+    background: none;
+    transition: color 0.25s, text-decoration 0.25s;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    max-width: 1280px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.button-research:hover {
+    text-decoration: underline;
+}
+
+.button-research:focus {
+    outline: none;
+}
