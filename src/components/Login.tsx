@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
+// TODO: Replace this with backend handling
+import { accountList } from "./utils/AccountList";
+
 export function Login() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -11,42 +14,13 @@ export function Login() {
 
   const navigate = useNavigate();
 
-  // TODO: Replace this with backend handling
-  const accounts: {
-    [key: string]: {
-      name: string;
-      email: string;
-      password: string;
-      role: string;
-    };
-  } = {
-    admin: {
-      name: "Paco",
-      email: "paco@mail.com",
-      password: "admin123",
-      role: "Admin",
-    },
-    researcher1: {
-      name: "David",
-      email: "david@mail.com",
-      password: "researcher123",
-      role: "Researcher",
-    },
-    researcher2: {
-      name: "Laura",
-      email: "laura@mail.com",
-      password: "researcher456",
-      role: "Researcher",
-    },
-  };
-
   const checkLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Check if username and password are valid
     if (
-      accounts[username] == undefined ||
-      accounts[username].password != password
+      accountList[username] == undefined ||
+      accountList[username].password != password
     ) {
       setError("Invalid username or password");
       return;
