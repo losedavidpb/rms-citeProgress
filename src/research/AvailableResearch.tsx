@@ -5,55 +5,8 @@ import "./../style/filter.css";
 
 // TODO: this must be located in a database
 // Template => Tile | Authors | Tags | Status | Date | Citations
-import { researchList, ResearchItem } from "./ResearchList";
-
-// -----------------------------
-// Filter Section
-// -----------------------------
-
-function FilterData(
-  searchTerm: string,
-  filterType: string,
-  data: ResearchItem[]
-) {
-  // Filter for text
-  const FilterText = (text: string, searchTerm: string) => {
-    return text.toLowerCase().includes(searchTerm.toLowerCase());
-  };
-
-  // Filter for array of texts
-  const FilterArrayText = (textArr: string[], searchTerm: string) => {
-    for (let index = 0; index < textArr.length; index++) {
-      if (FilterText(textArr[index], searchTerm)) return true;
-    }
-
-    return false;
-  };
-
-  // Filter for date
-  const FilterDate = (date: Date, searchTerm: string) => {
-    const dateString = date.toISOString().split("T")[0];
-    return dateString.includes(searchTerm);
-  };
-
-  // Map filter types to corresponding filter functions
-  const filterFunctions: {
-    [key: string]: (research: ResearchItem, searchTerm: string) => boolean;
-  } = {
-    title: (research, searchTerm) => FilterText(research.title, searchTerm),
-    authors: (research, searchTerm) =>
-      FilterArrayText(research.authors.split(","), searchTerm),
-    tags: (research, searchTerm) =>
-      FilterArrayText(research.tags.split(","), searchTerm),
-    status: (research, searchTerm) => FilterText(research.status, searchTerm),
-    date: (research, searchTerm) => FilterDate(research.date, searchTerm),
-  };
-
-  const filterFunction = filterFunctions[filterType];
-  return filterFunction
-    ? data.filter((research) => filterFunction(research, searchTerm))
-    : [];
-}
+import { researchList, Research } from "./ResearchList";
+import { Filter } from "../Filter";
 
 // -----------------------------
 
@@ -66,10 +19,13 @@ export function ResearchFilter() {
     navigate(`/research-dashboard/${id}`);
   };
 
-  const filteredData = FilterData(
-    searchTerm,
-    filterType,
-    researchList.sort((a, b) => b.citations - a.citations)
+  const sortCriteria = (a: Research, b: Research) => {
+    return b.citations - a.citations;
+  };
+
+  const filteredData: Research[] = Filter(
+    searchTerm, filterType,
+    researchList.sort(sortCriteria)
   );
 
   return (
@@ -93,6 +49,7 @@ export function ResearchFilter() {
           <option value="tags">Tags</option>
           <option value="status">Status</option>
           <option value="date">Date</option>
+          <option value="citations">Citations</option>
         </select>
       </div>
       <table>

@@ -1,4 +1,4 @@
-export type ResearchItem = {
+export type Research = {
   id: number;
   title: string;
   description: string;

@@ -6,48 +6,7 @@ import "./../style/filter.css";
 // TODO: this must be located in a database
 // Template => Tile | Authors | Tags | Status | Date | Citations
 import { Proposal, proposalList } from "./ProposalList";
-
-// -----------------------------
-// Filter Section
-// -----------------------------
-
-function FilterData(searchTerm: string, filterType: string, data: Proposal[]) {
-  // Filter for text
-  const FilterText = (text: string, searchTerm: string) => {
-    return text.toLowerCase().includes(searchTerm.toLowerCase());
-  };
-
-  // Filter for array of texts
-  const FilterArrayText = (textArr: string[], searchTerm: string) => {
-    for (let index = 0; index < textArr.length; index++) {
-      if (FilterText(textArr[index], searchTerm)) return true;
-    }
-
-    return false;
-  };
-
-  // Filter for date
-  const FilterDate = (date: string, searchTerm: string) => {
-    return date.includes(searchTerm);
-  };
-
-  // Map filter types to corresponding filter functions
-  const filterFunctions: {
-    [key: string]: (proposal: Proposal, searchTerm: string) => boolean;
-  } = {
-    title: (proposal, searchTerm) => FilterText(proposal.title, searchTerm),
-    authors: (proposal, searchTerm) =>
-      FilterArrayText(proposal.authors.split(","), searchTerm),
-    tags: (proposal, searchTerm) =>
-      FilterArrayText(proposal.tags.split(","), searchTerm),
-    date: (proposal, searchTerm) => FilterDate(proposal.date.toISOString(), searchTerm),
-  };
-
-  const filterFunction = filterFunctions[filterType];
-  return filterFunction
-    ? data.filter((proposal) => filterFunction(proposal, searchTerm))
-    : [];
-}
+import { Filter } from "../Filter";
 
 // -----------------------------
 
@@ -60,12 +19,13 @@ export function ProposalFilter() {
     navigate(`/proposal-review/${id}`);
   };
 
-  const filteredData = FilterData(
-    searchTerm,
-    filterType,
-    proposalList.sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    )
+  const sortCriteria = (a: Proposal, b: Proposal) => {
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  };
+
+  const filteredData: Proposal[] = Filter(
+    searchTerm, filterType,
+    proposalList.sort(sortCriteria)
   );
 
   return (
@@ -98,7 +58,6 @@ export function ProposalFilter() {
             <th>Tags</th>
             <th>Status</th>
             <th>Date</th>
-            <th>Citations</th>
           </tr>
         </thead>
         <tbody>
@@ -123,7 +82,6 @@ export function ProposalFilter() {
                 </td>
                 <td>Under Review</td>
                 <td>{proposal.date.toISOString().split("T")[0]}</td>
-                <td>{proposal.citations}</td>
               </tr>
             ))
           ) : (

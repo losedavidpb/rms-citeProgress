@@ -9,8 +9,8 @@ import { Login } from "./account/Login";
 import { SignUp } from "./account/SignUp";
 import { ProposalSubmission } from "./proposal/ProposalSubmission";
 import { ProposalReview } from "./proposal/ProposalReview";
-import { ProposalFilter } from "./proposal/ProposalFilter";
-import { ResearchFilter } from "./research/ResearchFilter";
+import { ProposalFilter } from "./proposal/AvailableProposals";
+import { ResearchFilter } from "./research/AvailableResearch";
 import { ResearchDashboard } from "./research/ResearchDashboard";
 import { GiveFeedback } from "./proposal/GiveFeedback";
 

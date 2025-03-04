@@ -5,7 +5,7 @@ export function Header() {
     <header className="header">
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
         <div className="container-fluid">
-          <Link to="/" className="navbar-brand">
+          <Link to="/available-research" className="navbar-brand">
             CiteProgress
           </Link>
           <button

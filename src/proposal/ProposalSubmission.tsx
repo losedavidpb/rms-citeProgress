@@ -1,71 +1,42 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Proposal } from "./ProposalList";
 
 import "./../style/proposal.css";
 
 export function ProposalSubmission() {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState<Proposal>({
-    id: 0,
-    title: "",
-    authors: "",
-    tags: "",
-    description: "",
-    date: "",
-    citations: 0,
-  });
+  const [title, setTitle] = useState<string>("");
+  const [authors, setAuthors] = useState<string>("");
+  const [tags, setTags] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [date, setDate] = useState<Date>(new Date());
+  const [citations, setCitations] = useState<number>(-1);
 
-  const [errors, setErrors] = useState<Proposal>({
-    id: 0,
-    title: "",
-    authors: "",
-    tags: "",
-    description: "",
-    date: "",
-    citations: 0,
-  });
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  const [error, setError] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const newErrors: Proposal = {
-      id: formData.id ? "" : "ID is required.",
-      title: formData.title ? "" : "Title is required.",
-      authors: formData.authors ? "" : "Authors are required.",
-      tags: formData.tags ? "" : "Tags are required.",
-      description: formData.description ? "" : "Description is required.",
-      date: formData.date ? "" : "Date is required.",
-      citations: formData.citations ? "" : "Citations are required.",
-    };
+    if (!title || !authors || !tags || !description || date == undefined || citations < 0 ) {
+      setError("Please fill out all fields");
+      return;
+    }
 
-    setErrors(newErrors);
+    // TODO: Submit the proposal to the backend
+    // ....
 
-    // Check if there are any errors
-    if (Object.values(newErrors).some((error) => error !== "")) return;
+    // Reset form data
+    setError("");
+    setTitle("");
+    setAuthors("");
+    setTags("");
+    setDescription("");
+    setDate(new Date());
+    setCitations(-1);
 
-    // Handle valid form submission
-    console.log("Proposal submitted:", formData);
-    setFormData({
-      id: 0,
-      title: "",
-      authors: "",
-      tags: "",
-      description: "",
-      date: "",
-      citations: 0,
-    });
-
-    // Simulate a backend call and navigate to another page (e.g., home page)
-    navigate("/home");
+    // Simulate a backend call and navigate to another page
+    navigate("/available-research");
   };
 
   return (
@@ -79,11 +50,11 @@ export function ProposalSubmission() {
             type="text"
             id="title"
             name="title"
-            value={formData.title}
-            onChange={handleInputChange}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             required
           />
-          {errors.title && <span className="error">{errors.title}</span>}
+          {error && <span className="error">{error}</span>}
         </div>
 
         {/* Authors Field */}
@@ -93,11 +64,11 @@ export function ProposalSubmission() {
             type="text"
             id="authors"
             name="authors"
-            value={formData.authors}
-            onChange={handleInputChange}
+            value={authors}
+            onChange={(e) => setAuthors(e.target.value)}
             required
           />
-          {errors.authors && <span className="error">{errors.authors}</span>}
+          {error && <span className="error">{error}</span>}
         </div>
 
         {/* Tags Field */}
@@ -107,11 +78,11 @@ export function ProposalSubmission() {
             type="text"
             id="tags"
             name="tags"
-            value={formData.tags}
-            onChange={handleInputChange}
+            value={tags}
+            onChange={(e) => setTags(e.target.value)}
             required
           />
-          {errors.tags && <span className="error">{errors.tags}</span>}
+          {error && <span className="error">{error}</span>}
         </div>
 
         {/* Description Field */}
@@ -120,13 +91,11 @@ export function ProposalSubmission() {
           <textarea
             id="description"
             name="description"
-            value={formData.description}
-            onChange={handleInputChange}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             required
           />
-          {errors.description && (
-            <span className="error">{errors.description}</span>
-          )}
+          {error && <span className="error">{error}</span>}
         </div>
 
         {/* Date Field */}
@@ -136,11 +105,25 @@ export function ProposalSubmission() {
             type="date"
             id="date"
             name="date"
-            value={formData.date}
-            onChange={handleInputChange}
+            value={date.toISOString().split("T")[0]}
+            onChange={(e) => setDate(new Date(e.target.value))}
             required
           />
-          {errors.date && <span className="error">{errors.date}</span>}
+          {error && <span className="error">{error}</span>}
+        </div>
+
+        {/* Citations Field */}
+        <div className="form-field">
+          <label htmlFor="citations">Citations</label>
+          <input
+            type="number"
+            id="citations"
+            name="citations"
+            value={citations}
+            onChange={(e) => setCitations(Number(e.target.value))}
+            min="0"
+            required
+          />
         </div>
 
         {/* Submit Button */}
