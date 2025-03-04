@@ -16,21 +16,29 @@ export function ResearchDashboard() {
 
   useEffect(() => {
     // Check if the id is a number
-    if (isNaN(numericId) || numericId < 0 || numericId >= researchList.length) {
+    if (isNaN(numericId) || numericId < 0 || numericId > researchList.length) {
       setError("Invalid research id");
       setResearch(undefined);
       return;
     }
 
     // Check if the research exists
-    if (researchList[numericId] == undefined) {
+    let foundResearch = undefined;
+
+    for (const researchItem of researchList) {
+      if (researchItem.id === numericId) {
+        foundResearch = researchItem;
+        break;
+      }
+    }
+
+    if (!foundResearch) {
       setError("Research not found");
-      setResearch(undefined);
       return;
     }
 
     setError("");
-    setResearch(researchList[numericId]);
+    setResearch(foundResearch);
   }, [numericId]);
 
   return (

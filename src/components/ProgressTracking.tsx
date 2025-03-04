@@ -116,7 +116,16 @@ export function ProgressTracking() {
               >
                 <td>{research.title}</td>
                 <td>{research.authors}</td>
-                <td>{research.tags}</td>
+                <td>
+                  {research.tags.split(",").map((tag, index) => (
+                    <button
+                      key={index}
+                      className="btn btn-outline-primary btn-sm me-2 mb-2"
+                    >
+                      #{tag.trim()}
+                    </button>
+                  ))}
+                </td>
                 <td>{research.status}</td>
                 <td>{research.date.toISOString().split("T")[0]}</td>
                 <td>{research.citations}</td>
