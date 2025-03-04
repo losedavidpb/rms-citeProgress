@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-import "./../style/login.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export function Login() {
@@ -13,17 +12,42 @@ export function Login() {
   const navigate = useNavigate();
 
   // TODO: Replace this with backend handling
-  const accounts: { [key: string]: { password: string; role: string } } = {
-    admin: { password: "admin123", role: "Admin" },
-    researcher1: { password: "researcher123", role: "Researcher" },
-    researcher2: { password: "researcher456", role: "Researcher" },
+  const accounts: {
+    [key: string]: {
+      name: string;
+      email: string;
+      password: string;
+      role: string;
+    };
+  } = {
+    admin: {
+      name: "Paco",
+      email: "paco@mail.com",
+      password: "admin123",
+      role: "Admin",
+    },
+    researcher1: {
+      name: "David",
+      email: "david@mail.com",
+      password: "researcher123",
+      role: "Researcher",
+    },
+    researcher2: {
+      name: "Laura",
+      email: "laura@mail.com",
+      password: "researcher456",
+      role: "Researcher",
+    },
   };
 
-  const checkLogin = (e) => {
+  const checkLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Check if username and password are valid
-    if (accounts[username] == undefined || accounts[username].password != password) {
+    if (
+      accounts[username] == undefined ||
+      accounts[username].password != password
+    ) {
       setError("Invalid username or password");
       return;
     }
@@ -34,78 +58,47 @@ export function Login() {
   };
 
   return (
-    <div>
-      <div className="tab-content">
-        <div
-          className="tab-pane fade show active"
-          id="pills-login"
-          role="tabpanel"
-          aria-labelledby="tab-login"
-        >
+    <div className="tab-content">
+      {error && <div className="alert alert-danger">{error}</div>}
 
-          {error && <div className="alert alert-danger">{error}</div>}
-
-          <form onSubmit={checkLogin}>
-            <div data-mdb-input-init className="form-outline mb-4">
-              <input
-                type="username"
-                id="loginUsername"
-                className="form-control"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-                placeholder="Enter your username"
-              />
-            </div>
-            <div data-mdb-input-init className="form-outline mb-4">
-              <input
-                type="password"
-                id="loginPassword"
-                className="form-control"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                placeholder="Enter your password"
-              />
-            </div>
-            <div className="row mb-4">
-              <div className="col-md-6 d-flex justify-content-center">
-                <div className="form-check mb-3 mb-md-0">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="loginCheck"
-                    checked
-                  />
-                  <label className="form-check-label" htmlFor="loginCheck">
-                    {" "}
-                    Remember me{" "}
-                  </label>
-                </div>
-              </div>
-
-              <div className="col-md-6 d-flex justify-content-center">
-                <a href="#!">Forgot password?</a>
-              </div>
-            </div>
-            <button
-              type="submit"
-              data-mdb-button-init
-              data-mdb-ripple-init
-              className="btn btn-primary btn-block mb-4"
-            >
-              Login
-            </button>
-
-            <div className="text-center">
-              <p>
-                Not a member? <Link to="/register">Register</Link>
-              </p>
-            </div>
-          </form>
+      <form onSubmit={checkLogin}>
+        <div data-mdb-input-init className="form-outline mb-4">
+          <input
+            type="username"
+            id="loginUsername"
+            className="form-control"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            placeholder="Enter your username"
+          />
         </div>
-      </div>
+        <div data-mdb-input-init className="form-outline mb-4">
+          <input
+            type="password"
+            id="loginPassword"
+            className="form-control"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            placeholder="Enter your password"
+          />
+        </div>
+        <button
+          type="submit"
+          data-mdb-button-init
+          data-mdb-ripple-init
+          className="btn btn-primary btn-block mb-4"
+        >
+          Login
+        </button>
+
+        <div className="text-center">
+          <p>
+            Not a member? <Link to="/sign-up">Sign up</Link>
+          </p>
+        </div>
+      </form>
     </div>
   );
 }

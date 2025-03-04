@@ -7,6 +7,7 @@ import { ProposalSubmission } from "./ProposalSubmission";
 import { ProposalReview } from "./ProposalReview";
 import { ProgressTracking } from "./ProgressTracking";
 import { ResearchDashboard } from "./ResearchDashboard";
+import { SignUp } from "./SignUp";
 
 function Home() {
   return (
@@ -15,6 +16,7 @@ function Home() {
 
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/sign-up" element={<SignUp />} />
         <Route path="/proposal-submission" element={<ProposalSubmission />} />
         <Route path="/proposal-review" element={<ProposalReview />} />
         <Route path="/progress-tracking" element={<ProgressTracking />} />
