@@ -6,13 +6,13 @@ import "./../style/filter.css";
 // TODO: this must be located in a database
 // Template => Tile | Authors | Tags | Status | Date | Citations
 import { Proposal, proposalList } from "./ProposalList";
-import { Filter } from "../Filter";
+import { Filter, FilterType } from "../Filter";
 
 // -----------------------------
 
 export function ProposalFilter() {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [filterType, setFilterType] = useState<string>("title");
+  const [filterType, setFilterType] = useState<FilterType>("title");
   const navigate = useNavigate();
 
   const handleTitleClick = (id: number) => {
@@ -41,7 +41,7 @@ export function ProposalFilter() {
         <select
           id="filter"
           value={filterType}
-          onChange={(e) => setFilterType(e.target.value)}
+          onChange={(e) => setFilterType(e.target.value as FilterType)}
           className="search-select btn btn-outline-primary"
         >
           <option value="title">Title</option>

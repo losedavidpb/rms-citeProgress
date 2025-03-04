@@ -1,5 +1,7 @@
 
-export function Filter(searchTerm: string, filterType: string, data: unknown[]) {
+export type FilterType = 'title' | 'authors' | 'tags' | 'date' | 'status' | 'citations';
+
+export function Filter(searchTerm: string, filterType: FilterType, data: unknown[]) {
   // Filter function that checks if a string contains the search term
   const FilterText = (text: string, searchTerm: string) => {
     return text.toLowerCase().includes(searchTerm.toLowerCase());

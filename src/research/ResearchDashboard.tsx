@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // TODO: this must be located in a database
-import { researchList, ResearchItem } from "./ResearchList";
+import { researchList, Research } from "./ResearchList";
 
 export function ResearchDashboard() {
   const [error, setError] = useState<string>("");
-  const [research, setResearch] = useState<ResearchItem | undefined>(undefined);
+  const [research, setResearch] = useState<Research | undefined>(undefined);
   const { id } = useParams<{ id: string }>();
 
   // Convert the id to a number
@@ -75,7 +75,7 @@ export function ResearchDashboard() {
 
             {/* Tags */}
             <div className="d-flex align-items-center mt-3">
-              {research.tags.split(",").map((tag, index) => (
+              {research.tags.split(",").map((tag: string, index: number) => (
                 <button
                   key={index}
                   className="btn btn-outline-primary btn-sm me-2 mb-2"
