@@ -12,15 +12,13 @@ import { SignUp } from "./SignUp";
 function Home() {
   return (
     <Router basename="/rms-citeProgress">
-      <h1 className="pb-3">CiteProgress</h1>
-
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/proposal-submission" element={<ProposalSubmission />} />
         <Route path="/proposal-review" element={<ProposalReview />} />
         <Route path="/progress-tracking" element={<ProgressTracking />} />
-        <Route path="/research-dashboard" element={<ResearchDashboard />} />
+        <Route path="/research-dashboard/:id" element={<ResearchDashboard />} />
       </Routes>
     </Router>
   );

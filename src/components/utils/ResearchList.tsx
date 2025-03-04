@@ -1,3 +1,14 @@
+export type ResearchItem = {
+  id: number;
+  title: string;
+  description: string;
+  authors: string;
+  tags: string;
+  status: string;
+  date: Date;
+  citations: number;
+};
+
 export const researchList = [
   {
     id: 1,

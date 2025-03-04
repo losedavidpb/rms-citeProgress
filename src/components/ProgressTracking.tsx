@@ -5,18 +5,7 @@ import "./../style/progress-tracking.css";
 
 // TODO: this must be located in a database
 // Template => Tile | Authors | Tags | Status | Date
-import { researchList } from "./utils/ResearchList";
-
-// Research data Interface
-interface ResearchItem {
-  id: number;
-  title: string;
-  authors: string;
-  tags: string;
-  status: string;
-  date: Date;
-  citations: number;
-}
+import { researchList, ResearchItem } from "./utils/ResearchList";
 
 // -----------------------------
 // Filter Section
@@ -97,7 +86,7 @@ export function ProgressTracking() {
           id="filter"
           value={filterType}
           onChange={(e) => setFilterType(e.target.value)}
-          className="search-select"
+          className="search-select btn btn-outline-primary"
         >
           <option value="title">Title</option>
           <option value="authors">Authors</option>
