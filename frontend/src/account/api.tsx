@@ -7,7 +7,7 @@ export interface User {
   role: string
 }
 
-export const logIn = async (username: string, password: string): Promise<User> => {
+export const logIn = async (username: string, password: string): Promise<User | null> => {
   try {
     const response = await fetch(`${API_URL}/login`, {
       method: "POST",
@@ -37,7 +37,7 @@ export const logIn = async (username: string, password: string): Promise<User> =
   }
 };
 
-export const signUp = async (name: string, username: string, email: string, password: string, accountType: string): Promise<User> => {
+export const signUp = async (name: string, username: string, email: string, password: string, accountType: string): Promise<User | null> => {
   try {
     const response = await fetch(`${API_URL}/signup`, {
       method: "POST",
