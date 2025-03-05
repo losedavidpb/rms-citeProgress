@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signUp } from "./api";
 
@@ -36,6 +36,13 @@ export function SignUp() {
       navigate("/");
     });
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("username") !== null) {
+      setError("");
+      navigate("/available-research");
+    }
+  }, [navigate]);
 
   return (
     <div className="tab-content">

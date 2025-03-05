@@ -1,6 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function Header() {
+  const navigate = useNavigate();
+
+  function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("role");
+    navigate("/");
+  };
+
   return (
     <header className="header">
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -22,7 +31,11 @@ export function Header() {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav ms-auto">
               <li className="nav-item">
-                <Link to="/available-research" className="nav-link active" aria-current="page">
+                <Link
+                  to="/available-research"
+                  className="nav-link active"
+                  aria-current="page"
+                >
                   Home
                 </Link>
               </li>
@@ -37,9 +50,9 @@ export function Header() {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="/" className="nav-link" onClick={() => localStorage.clear()}>
+                <button className="nav-link" onClick={() => logout()}>
                   Log Out
-                </Link>
+                </button>
               </li>
             </ul>
           </div>

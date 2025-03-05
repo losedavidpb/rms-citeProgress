@@ -64,8 +64,16 @@ export function Filter(searchTerm: string, filterType: FilterType, data: unknown
   const filterFunction = filterFunctions[filterType];
 
   if (filterFunction) {
-    return (data as any[]).filter((e) =>
-      filterFunction(e[filterType], searchTerm)
+    return (data as any[]).filter((e) => {
+
+
+      // Check if filtering will be applied to proposals
+      if ("research" in e) {
+        return filterFunction(e.research[filterType], searchTerm);
+      }
+
+      return filterFunction(e[filterType], searchTerm);
+    }
     );
   }
 

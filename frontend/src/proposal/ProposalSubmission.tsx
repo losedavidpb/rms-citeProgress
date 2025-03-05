@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "./../style/proposal.css";
@@ -38,6 +38,12 @@ export function ProposalSubmission() {
     // Simulate a backend call and navigate to another page
     navigate("/available-research");
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("username") == null) {
+      navigate("/");
+    }
+  });
 
   return (
     <div className="form-container">

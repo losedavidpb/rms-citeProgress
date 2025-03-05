@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 // TODO: this must be located in a database
-import { proposalList, Proposal } from "./ProposalList";
+import { Proposal, getProposal } from "./api";
 
 export function ProposalReview() {
   const [error, setError] = useState<string>("");
@@ -15,30 +15,22 @@ export function ProposalReview() {
   const numericId = Number(id);
 
   useEffect(() => {
-    // Check if the id is a number
-    if (isNaN(numericId) || numericId < 0 || numericId > proposalList.length) {
-      setError("Invalid proposal id");
-      setProposal(undefined);
-      return;
+    if (localStorage.getItem("username") == null) {
+      navigate("/");
     }
+  });
 
-    // Check if the proposal exists
-    let foundproposal = undefined;
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getProposal(numericId);
 
-    for (const Proposal of proposalList) {
-      if (Proposal.id === numericId) {
-        foundproposal = Proposal;
-        break;
+      if (data != null) {
+        setError("");
+        setProposal(data);
       }
-    }
+    };
 
-    if (!foundproposal) {
-      setError("proposal not found");
-      return;
-    }
-
-    setError("");
-    setProposal(foundproposal);
+    fetchData();
   }, [numericId]);
 
   return (
@@ -52,16 +44,16 @@ export function ProposalReview() {
           <div className="card-body">
             {/* Title */}
             <div className="d-flex align-items-center">
-              <h3 className="fw-bold mb-4">{proposal.title}</h3>
+              <h3 className="fw-bold mb-4">{proposal.research.title}</h3>
             </div>
 
             {/* Authors and Date */}
             <div className="d-flex align-items-center">
               <p className="mb-0">
-                <strong>Authors:</strong> {proposal.authors}
+                <strong>Authors:</strong> {proposal.research.authors}
               </p>
               <p className="text-muted mb-0 ms-3">
-                ({proposal.date.toISOString().split("T")[0]})
+                ({proposal.research.date.split("T")[0]})
               </p>
             </div>
 
@@ -71,13 +63,13 @@ export function ProposalReview() {
                 <strong>Status:</strong> Under Review
               </p>
               <p className="text-muted mb-0 ms-3">
-                ({proposal.citations} citations)
+                ({proposal.research.citations} citations)
               </p>
             </div>
 
             {/* Tags */}
             <div className="d-flex align-items-center mt-3">
-              {proposal.tags.split(",").map((tag, index) => (
+              {proposal.research.tags.map((tag, index) => (
                 <button
                   key={index}
                   className="btn btn-outline-primary btn-sm me-2 mb-2"
@@ -93,11 +85,14 @@ export function ProposalReview() {
             </div>
 
             <div className="d-flex align-items-center">
-              <p className="mb-0">{proposal.description}</p>
+              <p className="mb-0">{proposal.research.description}</p>
             </div>
           </div>
 
-          <button className="btn btn-primary mt-3" onClick={() => navigate("/give-feedback")}>
+          <button
+            className="btn btn-primary mt-3"
+            onClick={() => navigate("/give-feedback")}
+          >
             Give Feedback
           </button>
         </div>

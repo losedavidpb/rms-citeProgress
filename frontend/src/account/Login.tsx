@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -27,6 +27,13 @@ export function Login() {
       navigate("/available-research");
     });
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("username") !== null) {
+      setError("");
+      navigate("/available-research");
+    }
+  }, [navigate]);
 
   return (
     <div className="tab-content">

@@ -1,32 +1,46 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "./../style/filter.css";
 
-// TODO: this must be located in a database
-// Template => Tile | Authors | Tags | Status | Date | Citations
-import { Proposal, proposalList } from "./ProposalList";
+import { getPendingProposals, Proposal } from "./api";
 import { Filter, FilterType } from "../Filter";
 
-// -----------------------------
-
 export function ProposalFilter() {
+  const [filteredData, setFilteredData] = useState<Proposal[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filterType, setFilterType] = useState<FilterType>("title");
   const navigate = useNavigate();
 
   const handleTitleClick = (id: number) => {
+    localStorage.setItem("selected-proposal", id.toString());
     navigate(`/proposal-review/${id}`);
   };
 
   const sortCriteria = (a: Proposal, b: Proposal) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
+    return new Date(b.research.date).getTime() - new Date(a.research.date).getTime();
   };
 
-  const filteredData: Proposal[] = Filter(
-    searchTerm, filterType,
-    proposalList.sort(sortCriteria)
-  );
+  useEffect(() => {
+    if (localStorage.getItem("username") == null) {
+      navigate("/");
+    }
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getPendingProposals();
+
+      if (data != null) {
+        const sortedData = data.sort(sortCriteria);
+        const filtered = Filter(searchTerm, filterType, sortedData);
+        setFilteredData(filtered);
+        console.log(filtered)
+      }
+    };
+
+    fetchData();
+  }, [searchTerm, filterType]);
 
   return (
     <>
@@ -56,7 +70,7 @@ export function ProposalFilter() {
             <th>Title</th>
             <th>Author(s)</th>
             <th>Tags</th>
-            <th>Status</th>
+            <th>Requester</th>
             <th>Date</th>
           </tr>
         </thead>
@@ -64,14 +78,14 @@ export function ProposalFilter() {
           {filteredData.length > 0 ? (
             filteredData.map((proposal) => (
               <tr
-                key={proposal.title}
-                onClick={() => handleTitleClick(proposal.id)}
+                key={proposal.research.title}
+                onClick={() => handleTitleClick(proposal.research.id)}
                 className="button-proposal"
               >
-                <td>{proposal.title}</td>
-                <td>{proposal.authors}</td>
+                <td>{proposal.research.title}</td>
+                <td>{proposal.research.authors}</td>
                 <td>
-                  {proposal.tags.split(",").map((tag, index) => (
+                  {proposal.research.tags.map((tag, index) => (
                     <button
                       key={index}
                       className="btn btn-outline-primary btn-sm me-2 mb-2"
@@ -80,8 +94,8 @@ export function ProposalFilter() {
                     </button>
                   ))}
                 </td>
-                <td>Under Review</td>
-                <td>{proposal.date.toISOString().split("T")[0]}</td>
+                <td>{proposal.author.name}</td>
+                <td>{proposal.research.date.split("T")[0]}</td>
               </tr>
             ))
           ) : (

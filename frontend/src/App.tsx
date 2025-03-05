@@ -10,7 +10,7 @@ import { SignUp } from "./account/SignUp";
 import { ProposalSubmission } from "./proposal/ProposalSubmission";
 import { ProposalReview } from "./proposal/ProposalReview";
 import { ProposalFilter } from "./proposal/AvailableProposals";
-import { ResearchFilter } from "./research/AvailableResearch";
+import { AvailableResearch } from "./research/AvailableResearch";
 import { ResearchDashboard } from "./research/ResearchDashboard";
 import { GiveFeedback } from "./proposal/GiveFeedback";
 
@@ -31,7 +31,7 @@ function App() {
         <Route path="/proposal-submission" element={<ProposalSubmission />} />
         <Route path="/proposal-review/:id" element={<ProposalReview />} />
         <Route path="/give-feedback" element={<GiveFeedback />} />
-        <Route path="/available-research" element={<ResearchFilter />} />
+        <Route path="/available-research" element={<AvailableResearch />} />
         <Route path="/research-dashboard/:id" element={<ResearchDashboard />} />
       </Routes>
     </Router>

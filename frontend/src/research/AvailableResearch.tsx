@@ -1,16 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "./../style/filter.css";
 
-// TODO: this must be located in a database
-// Template => Tile | Authors | Tags | Status | Date | Citations
-import { researchList, Research } from "./ResearchList";
+import { Research, getAvailableResearch } from "./api";
 import { Filter, FilterType } from "../Filter";
 
-// -----------------------------
-
-export function ResearchFilter() {
+export function AvailableResearch() {
+  const [filteredData, setFilteredData] = useState<Research[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filterType, setFilterType] = useState<FilterType>("title");
   const navigate = useNavigate();
@@ -23,10 +20,25 @@ export function ResearchFilter() {
     return b.citations - a.citations;
   };
 
-  const filteredData: Research[] = Filter(
-    searchTerm, filterType,
-    researchList.sort(sortCriteria)
-  );
+  useEffect(() => {
+    if (localStorage.getItem("username") == null) {
+      navigate("/");
+    }
+  })
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getAvailableResearch();
+
+      if (data != null) {
+        const sortedData = data.sort(sortCriteria);
+        const filtered = Filter(searchTerm, filterType, sortedData);
+        setFilteredData(filtered);
+      }
+    };
+
+    fetchData();
+  }, [searchTerm, filterType]);
 
   return (
     <>
@@ -74,7 +86,7 @@ export function ResearchFilter() {
                 <td>{research.title}</td>
                 <td>{research.authors}</td>
                 <td>
-                  {research.tags.split(",").map((tag, index) => (
+                  {research.tags.map((tag, index) => (
                     <button
                       key={index}
                       className="btn btn-outline-primary btn-sm me-2 mb-2"
@@ -84,7 +96,7 @@ export function ResearchFilter() {
                   ))}
                 </td>
                 <td>{research.status}</td>
-                <td>{research.date.toISOString().split("T")[0]}</td>
+                <td>{research.date.split("T")[0]}</td>
                 <td>{research.citations}</td>
               </tr>
             ))

@@ -1,7 +1,14 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export function GiveFeedback() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("username") == null) {
+      navigate("/");
+    }
+  });
 
     return (
       <div>

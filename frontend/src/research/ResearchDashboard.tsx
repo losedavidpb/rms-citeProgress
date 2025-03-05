@@ -1,42 +1,34 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-// TODO: this must be located in a database
-import { researchList, Research } from "./ResearchList";
+import { Research, getResearch } from "./api";
 
 export function ResearchDashboard() {
   const [error, setError] = useState<string>("");
   const [research, setResearch] = useState<Research | undefined>(undefined);
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
   // Convert the id to a number
   const numericId = Number(id);
 
   useEffect(() => {
-    // Check if the id is a number
-    if (isNaN(numericId) || numericId < 0 || numericId > researchList.length) {
-      setError("Invalid research id");
-      setResearch(undefined);
-      return;
+    if (localStorage.getItem("username") == null) {
+      navigate("/");
     }
+  });
 
-    // Check if the research exists
-    let foundResearch = undefined;
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getResearch(numericId);
 
-    for (const researchItem of researchList) {
-      if (researchItem.id === numericId) {
-        foundResearch = researchItem;
-        break;
+      if (data != null) {
+        setError("");
+        setResearch(data);
       }
-    }
+    };
 
-    if (!foundResearch) {
-      setError("Research not found");
-      return;
-    }
-
-    setError("");
-    setResearch(foundResearch);
+    fetchData();
   }, [numericId]);
 
   return (
@@ -59,7 +51,7 @@ export function ResearchDashboard() {
                 <strong>Authors:</strong> {research.authors}
               </p>
               <p className="text-muted mb-0 ms-3">
-                ({research.date.toISOString().split("T")[0]})
+                ({research.date.split("T")[0]})
               </p>
             </div>
 
@@ -75,7 +67,7 @@ export function ResearchDashboard() {
 
             {/* Tags */}
             <div className="d-flex align-items-center mt-3">
-              {research.tags.split(",").map((tag: string, index: number) => (
+              {research.tags.map((tag: string, index: number) => (
                 <button
                   key={index}
                   className="btn btn-outline-primary btn-sm me-2 mb-2"
