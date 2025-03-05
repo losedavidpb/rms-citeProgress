@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { signUp } from "./api";
 
 export function SignUp() {
   const [name, setName] = useState<string>("");
@@ -12,54 +13,10 @@ export function SignUp() {
 
   const navigate = useNavigate();
 
-  // TODO: Replace this with backend handling
-  const accounts: {
-    [key: string]: {
-      name: string;
-      email: string;
-      password: string;
-      role: string;
-    };
-  } = {
-    admin: {
-      name: "Paco",
-      email: "paco@mail.com",
-      password: "admin123",
-      role: "Admin",
-    },
-    researcher1: {
-      name: "David",
-      email: "david@mail.com",
-      password: "researcher123",
-      role: "Researcher",
-    },
-    researcher2: {
-      name: "Laura",
-      email: "laura@mail.com",
-      password: "researcher456",
-      role: "Researcher",
-    },
-  };
-
   const checkSignUp = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Check if username already exists
-    if (accounts[username] != undefined) {
-      setError("Username already exists");
-      return;
-    }
-
-    // Check if username already exists
-    for (const account in accounts) {
-      if (accounts[account].email == email) {
-        setError("Email already exists");
-        return;
-      }
-    }
-
-    // Check if username and password are valid
-    if (password != repeatPassword) {
+    if (password !== repeatPassword) {
       setError("Passwords do not match");
       return;
     }
@@ -69,8 +26,15 @@ export function SignUp() {
       return;
     }
 
-    setError("");
-    navigate("/");
+    signUp(name, username, email, password, "Researcher").then((data) => {
+      if (data == null) {
+        setError("Invalid signup credentials");
+        return;
+      }
+
+      setError("");
+      navigate("/");
+    });
   };
 
   return (

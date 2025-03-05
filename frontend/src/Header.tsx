@@ -37,7 +37,7 @@ export function Header() {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="/" className="nav-link">
+                <Link to="/" className="nav-link" onClick={() => localStorage.clear()}>
                   Log Out
                 </Link>
               </li>

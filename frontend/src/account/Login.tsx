@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 // TODO: Replace this with backend handling
-import { accountList } from "./AccountList";
+//import { accountList } from "./api";
+import { logIn } from "./api";
 
 export function Login() {
   const [username, setUsername] = useState<string>("");
@@ -15,18 +16,16 @@ export function Login() {
   const checkLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Check if username and password are valid
-    if (
-      accountList[username] == undefined ||
-      accountList[username].password != password
-    ) {
-      setError("Invalid username or password");
-      return;
-    }
+    logIn(username, password).then((data) => {
+      if (data == null) {
+        setError("Invalid login credentials");
+        return;
+      }
 
-    // Redirect to appropriate page
-    setError("");
-    navigate("/available-research");
+      // Redirect to appropriate page
+      setError("");
+      navigate("/available-research");
+    });
   };
 
   return (
