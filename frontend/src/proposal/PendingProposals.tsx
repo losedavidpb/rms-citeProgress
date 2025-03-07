@@ -6,7 +6,7 @@ import "./../style/filter.css";
 import { getPendingProposals, Proposal } from "./api";
 import { Filter, FilterType } from "../Filter";
 
-export function ProposalFilter() {
+export function PendingProposals() {
   const [filteredData, setFilteredData] = useState<Proposal[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filterType, setFilterType] = useState<FilterType>("title");
@@ -18,24 +18,33 @@ export function ProposalFilter() {
   };
 
   const sortCriteria = (a: Proposal, b: Proposal) => {
-    return new Date(b.research.date).getTime() - new Date(a.research.date).getTime();
+    return (
+      new Date(b.research.date).getTime() - new Date(a.research.date).getTime()
+    );
   };
 
   useEffect(() => {
     if (localStorage.getItem("username") == null) {
       navigate("/");
     }
+
+    if (localStorage.getItem("role") !== "Researcher") {
+      navigate("/available-research");
+    }
   });
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getPendingProposals(null);
+      const username = localStorage.getItem("username");
 
-      if (data != null) {
-        const sortedData = data.sort(sortCriteria);
-        const filtered = Filter(searchTerm, filterType, sortedData);
-        setFilteredData(filtered);
-        console.log(filtered)
+      if (username) {
+        const data = await getPendingProposals(username);
+
+        if (data != null) {
+          const sortedData = data.sort(sortCriteria);
+          const filtered = Filter(searchTerm, filterType, sortedData);
+          setFilteredData(filtered);
+        }
       }
     };
 

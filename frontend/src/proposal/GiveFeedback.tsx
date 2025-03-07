@@ -8,6 +8,10 @@ export function GiveFeedback() {
     if (localStorage.getItem("username") == null) {
       navigate("/");
     }
+
+    if (localStorage.getItem("role") !== "Admin") {
+      navigate("/available-research");
+    }
   });
 
     return (

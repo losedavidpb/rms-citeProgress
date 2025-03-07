@@ -58,18 +58,16 @@ public class ProposalRepository {
         return result;
     }
 
-    private List<Proposal> findByAuthor(String author) {
-        if (this.proposals.containsKey(author)) {
-            List<Proposal> proposals = new ArrayList<>();
+    public List<Proposal> findByAuthor(String author) {
+        List<Proposal> proposals = new ArrayList<>();
 
+        if (this.proposals.containsKey(author)) {
             for (Long ID : this.proposals.get(author)) {
                 Research research = researchRepository.findById(ID);
                 proposals.add(new Proposal(research, author));
             }
-
-            return proposals;
         }
 
-        return null;
+        return proposals;
     }
 }

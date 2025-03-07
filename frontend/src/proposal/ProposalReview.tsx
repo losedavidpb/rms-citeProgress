@@ -18,6 +18,10 @@ export function ProposalReview() {
     if (localStorage.getItem("username") == null) {
       navigate("/");
     }
+
+    if (localStorage.getItem("role") !== "Admin") {
+      navigate("/available-research");
+    }
   });
 
   useEffect(() => {

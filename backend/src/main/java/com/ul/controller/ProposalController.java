@@ -24,10 +24,14 @@ public class ProposalController {
     private ProposalService proposalService;
 
     // Pending Proposals -
-    // http://localhost:8080/api/proposal/pending-proposals
+    // http://localhost:8080/api/proposal/pending-proposals?username=
     @GetMapping("pending-proposals")
-    public List<Proposal> getPendingProposals() {
-        return proposalService.getProposals();
+    public List<Proposal> getPendingProposals(@RequestParam("username") String username) {
+        if (username == null) {
+            return proposalService.getProposals();
+        } else {
+            return proposalService.getProposalsByAuthor(username);
+        }
     }
 
     // Pending Proposals -

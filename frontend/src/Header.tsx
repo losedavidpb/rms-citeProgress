@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 export function Header() {
   const navigate = useNavigate();
+  const role = localStorage.getItem("role");
 
   function logout() {
     localStorage.removeItem("token");
@@ -39,16 +40,29 @@ export function Header() {
                   Home
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link to="/proposal-submission" className="nav-link">
-                  Submit Proposal
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/available-proposals" className="nav-link">
-                  Review Proposals
-                </Link>
-              </li>
+              {/* Only show these links if the user is a researcher */}
+              {role === "Researcher" && (
+                <li className="nav-item">
+                  <Link to="/proposal-submission" className="nav-link">
+                    Submit Proposal
+                  </Link>
+                </li>
+              )}
+              {role === "Researcher" && (
+                <li className="nav-item">
+                  <Link to="/pending-proposals" className="nav-link">
+                    Pending Proposals
+                  </Link>
+                </li>
+              )}
+              {/* Only show this link if the user is an admin */}
+              {role === "Admin" && (
+                <li className="nav-item">
+                  <Link to="/available-proposals" className="nav-link">
+                    Review Proposals
+                  </Link>
+                </li>
+              )}
               <li className="nav-item">
                 <button className="nav-link" onClick={() => logout()}>
                   Log Out

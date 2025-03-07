@@ -14,7 +14,7 @@ export const logIn = async (username: string, password: string): Promise<User | 
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ username, password })
     });
 
     if (!response.ok) {
@@ -22,6 +22,8 @@ export const logIn = async (username: string, password: string): Promise<User | 
     }
 
     const data = await response.json();
+
+    console.log(data);
 
     // Store account details in local storage
     if (data.token) {

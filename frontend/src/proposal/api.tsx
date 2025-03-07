@@ -6,33 +6,17 @@ export type Proposal = {
   research: Research;
 };
 
-/*export const proposalList: Proposal[] = [
-  {
-    id: 1,
-    title: "Research Proposal 1",
-    authors: "Author One, Author Two",
-    tags: "AI, Machine Learning",
-    description: "This is a description of the first research proposal.",
-    date: new Date("2023-03-01"),
-    citations: 10,
-  },
-  {
-    id: 2,
-    title: "Research Proposal 2",
-    authors: "Author Three, Author Four",
-    tags: "Quantum Computing, Physics",
-    description: "This is a description of the second research proposal.",
-    date: new Date("2024-06-15"),
-    citations: 5,
-  },
-];
-*/
-export const proposalList = [];
 const API_URL = "http://localhost:8080/api/proposal";
 
-export const getPendingProposals = async (): Promise<Proposal[] | null> => {
+export const getPendingProposals = async (username: string | null): Promise<Proposal[] | null> => {
+  let path = `${API_URL}/pending-proposals`;
+
+  if (username !== undefined || username !== null) {
+    path = path + `?username=${username}`;
+  }
+
   try {
-    const response = await fetch(`${API_URL}/pending-proposals`, {
+    const response = await fetch(path, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

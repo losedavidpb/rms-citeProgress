@@ -9,3 +9,27 @@ and collaboration across academic, scientific, and industrial research environme
 - **Front-end:** React
 - **Back-end:** Spring Boot
 - **Database:** MySQL
+
+## How to Use
+
+### Backend Setup
+
+```
+cd backend
+mvn clean install
+mvn spring-boot:run
+```
+### Frontend Setup
+
+```
+cd frontend
+npm install
+npm run dev
+```
+
+### Access the Application
+Once both frontend and backend are running, open your browser and visit:
+
+```
+http://localhost:5173/rms-citeProgress/
+```

@@ -37,6 +37,7 @@ export function Login() {
 
   return (
     <div className="tab-content">
+      <h1 className="pb-4">Log In</h1>
       {error && <div className="alert alert-danger">{error}</div>}
 
       <form onSubmit={checkLogin}>

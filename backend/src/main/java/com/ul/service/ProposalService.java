@@ -17,6 +17,10 @@ public class ProposalService {
         return proposalRepository.findByID(ID);
     }
 
+    public List<Proposal> getProposalsByAuthor(String username) {
+        return proposalRepository.findByAuthor(username);
+    }
+
     public List<Proposal> getProposals() {
         return proposalRepository.findAll();
     }

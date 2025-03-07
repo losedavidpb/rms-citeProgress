@@ -13,6 +13,7 @@ import { ProposalFilter } from "./proposal/AvailableProposals";
 import { AvailableResearch } from "./research/AvailableResearch";
 import { ResearchDashboard } from "./research/ResearchDashboard";
 import { GiveFeedback } from "./proposal/GiveFeedback";
+import { PendingProposals } from "./proposal/PendingProposals";
 
 function App() {
   // Enable/disable the header based on the current page
@@ -29,6 +30,7 @@ function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/available-proposals" element={<ProposalFilter />} />
         <Route path="/proposal-submission" element={<ProposalSubmission />} />
+        <Route path="/pending-proposals" element={<PendingProposals />} />
         <Route path="/proposal-review/:id" element={<ProposalReview />} />
         <Route path="/give-feedback" element={<GiveFeedback />} />
         <Route path="/available-research" element={<AvailableResearch />} />

@@ -43,6 +43,10 @@ export function ProposalSubmission() {
     if (localStorage.getItem("username") == null) {
       navigate("/");
     }
+
+    if (localStorage.getItem("role") !== "Researcher") {
+      navigate("/available-research");
+    }
   });
 
   return (
