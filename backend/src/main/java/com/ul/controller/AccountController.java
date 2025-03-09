@@ -13,6 +13,7 @@ import com.ul.model.Account;
 import com.ul.security.JwtUtil;
 import com.ul.service.AccountService;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -38,7 +39,13 @@ public class AccountController {
         }
 
         String jwt = jwtTokenUtil.generateToken(username);
-        return ResponseEntity.ok(Map.of("token", jwt));
+
+        Map<String, String> response = new HashMap<>();
+        response.put("username", username);
+        response.put("token", jwt);
+        response.put("role", account.getAccountType());
+
+        return ResponseEntity.ok(response);
     }
 
     // Sign up -
