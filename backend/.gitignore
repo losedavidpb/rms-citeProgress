@@ -7,13 +7,6 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Node modules and build output
-node_modules
-dist
-dist-ssr
-*.local
-package-lock.json
-
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -55,5 +48,3 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
-
-TODO.txt
