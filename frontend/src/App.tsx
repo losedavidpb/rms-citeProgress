@@ -18,7 +18,8 @@ import { PendingProposals } from "./proposal/PendingProposals";
 function App() {
   // Enable/disable the header based on the current page
   function SetHeader() {
-    return useLocation().pathname === "/" ? null : <Header />;
+    const path = useLocation().pathname;
+    return path === "/" || path === "/sign-up" ? null : <Header />;
   }
 
   return (
