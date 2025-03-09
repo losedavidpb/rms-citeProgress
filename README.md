@@ -8,7 +8,6 @@ and collaboration across academic, scientific, and industrial research environme
 
 - **Front-end:** React
 - **Back-end:** Spring Boot
-- **Database:** MySQL
 
 ## How to Use
 
