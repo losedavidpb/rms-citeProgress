@@ -26,6 +26,25 @@ public class AccountController {
     @Autowired
     private JwtUtil jwtTokenUtil;
 
+    // Sign up -
+    // http://localhost:8080/api/account/signup
+    @PostMapping("/signup")
+    public ResponseEntity<?> signUp(@RequestBody Map<String, String> credentials) {
+        String name = credentials.get("name");
+        String username = credentials.get("username");
+        String email = credentials.get("email");
+        String password = credentials.get("password");
+        String role = credentials.get("role");
+
+        Account account = accountService.signUp(name, username, email, password, role);
+
+        if (account != null) {
+            return ResponseEntity.ok(account);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid credentials for new account");
+        }
+    }
+
     // Log in -
     // http://localhost:8080/api/account/login
     @PostMapping("/login")
@@ -35,7 +54,7 @@ public class AccountController {
         Account account = accountService.logIn(username, password);
 
         if (account == null) {
-            return ResponseEntity.badRequest().body("Invalid credentials");
+            return ResponseEntity.badRequest().body("Invalid credentials for passed account");
         }
 
         String jwt = jwtTokenUtil.generateToken(username);
@@ -43,26 +62,8 @@ public class AccountController {
         Map<String, String> response = new HashMap<>();
         response.put("username", username);
         response.put("token", jwt);
-        response.put("role", account.getAccountType());
+        response.put("role", account.getRole());
 
         return ResponseEntity.ok(response);
-    }
-
-    // Sign up -
-    // http://localhost:8080/api/account/signup
-    @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody Map<String, String> credentials) {
-        String name = credentials.get("name");
-        String username = credentials.get("username");
-        String email = credentials.get("email");
-        String password = credentials.get("password");
-        String accountType = credentials.get("accountType");
-        Account account = accountService.signUp(name, username, email, password, accountType);
-
-        if (account != null) {
-            return ResponseEntity.ok(account);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
     }
 }

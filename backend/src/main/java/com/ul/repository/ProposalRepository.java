@@ -1,87 +1,95 @@
 package com.ul.repository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.ul.model.Feedback;
 import com.ul.model.Proposal;
 import com.ul.model.Research;
 
 @Repository
 public class ProposalRepository {
-    private Map<String, List<Long>> proposals;
+    private final Map<String, List<Proposal>> proposals;
 
     @Autowired
     private ResearchRepository researchRepository;
 
     public ProposalRepository() {
         this.proposals = new HashMap<>();
-        initProposals();
-    }
-
-    private void initProposals() {
-        this.proposals.put("david", Arrays.asList(2L, 3L, 5L));
-        this.proposals.put("laura", Arrays.asList(1L, 6L, 8L));
-    }
-
-    public Proposal findByID(long ID) {
-        Research research = researchRepository.findById(ID);
-
-        if (research != null) {
-            for (String author : proposals.keySet()) {
-                if (proposals.get(author).contains(research.getID())) {
-                    return new Proposal(research, author);
-                }
-            }
-        }
-
-        return null;
     }
 
     public List<Proposal> findAll() {
         List<Proposal> result = new ArrayList<>();
 
-        for (String author : proposals.keySet()) {
-            List<Proposal> userProposals = findByAuthor(author);
-
-            if (userProposals != null && !userProposals.isEmpty()) {
-                result.addAll(userProposals);
-            }
+        for (List<Proposal> proposalList : this.proposals.values()) {
+            result.addAll(proposalList);
         }
 
         return result;
     }
 
     public List<Proposal> findByAuthor(String author) {
-        List<Proposal> proposals = new ArrayList<>();
+        return proposals.getOrDefault(author, new ArrayList<>());
+    }
 
-        if (this.proposals.containsKey(author)) {
-            for (Long ID : this.proposals.get(author)) {
-                Research research = researchRepository.findById(ID);
-                proposals.add(new Proposal(research, author));
-            }
-        }
-
-        return proposals;
+    public Optional<Proposal> findByID(long id) {
+        return proposals.values().stream()
+            .flatMap(List::stream)
+            .filter(proposal -> proposal.getResearch().getID() == id)
+            .findFirst();
     }
 
     public boolean addProposal(Proposal proposal) {
         String author = proposal.getAuthor();
+        if (containsProposal(author, proposal)) return false;
 
-        if (this.proposals.containsKey(author)) {
-            List<Proposal> userProposals = findByAuthor(author);
+        List<Proposal> userProposals = proposals.computeIfAbsent(author, k -> new ArrayList<>());
 
-            if (!userProposals.contains(proposal)) {
-                proposal.getResearch().setID(researchRepository.getLastID());
-                return userProposals.add(proposal);
+        proposal.getResearch().setID(ResearchRepository.getLastID());
+        ResearchRepository.incrementID();
+
+        return userProposals.add(proposal);
+    }
+
+    public boolean giveFeedback(Feedback feedback) {
+        Optional<Proposal> proposal = findByID(feedback.getID());
+        if (!proposal.isPresent()) return false;
+
+        if (feedback.getAnswer()) {
+            Research research = proposal.get().getResearch();
+
+            if (!researchRepository.addResearch(research)) {
+                return false;
             }
         }
 
-        return false;
+        return removeProposal(proposal.get());
+    }
+
+    private boolean containsProposal(String author, Proposal proposal) {
+        return proposals.containsKey(author) && proposals.get(author).contains(proposal);
+    }
+
+    private boolean removeProposal(Proposal proposal) {
+        String author = proposal.getAuthor();
+
+        if (author == null || !proposals.containsKey(author)) {
+            return false;
+        }
+
+        List<Proposal> userProposals = proposals.get(author);
+        boolean removed = userProposals.remove(proposal);
+
+        if (userProposals.isEmpty()) {
+            proposals.remove(author);
+        }
+
+        return removed;
     }
 }

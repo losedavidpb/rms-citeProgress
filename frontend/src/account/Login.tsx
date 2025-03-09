@@ -22,7 +22,6 @@ export function Login() {
         return;
       }
 
-      // Redirect to appropriate page
       setError("");
       navigate("/available-research");
     });

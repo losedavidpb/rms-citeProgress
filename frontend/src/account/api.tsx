@@ -10,10 +10,7 @@ export interface User {
   role: string;
 }
 
-export const logIn = async (
-  username: string,
-  password: string
-): Promise<User | null> => {
+export const logIn = async (username: string, password: string): Promise<User | null> => {
   try {
     const response = await fetch(`${API_URL}/login`, {
       method: "POST",
@@ -29,7 +26,6 @@ export const logIn = async (
 
     const data = await response.json();
 
-    // Store account details in local storage
     if (data.token) {
       localStorage.setItem("token", data.token);
       localStorage.setItem("username", username);
@@ -43,13 +39,7 @@ export const logIn = async (
   }
 };
 
-export const signUp = async (
-  name: string,
-  username: string,
-  email: string,
-  password: string,
-  accountType: string
-): Promise<User | null> => {
+export const signUp = async (name: string, username: string, email: string, password: string, role: string): Promise<User | null> => {
   try {
     const response = await fetch(`${API_URL}/signup`, {
       method: "POST",
@@ -61,7 +51,7 @@ export const signUp = async (
         username: username,
         email: email,
         password: password,
-        accountType: accountType,
+        role: role,
       }),
     });
 

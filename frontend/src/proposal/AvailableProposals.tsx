@@ -28,12 +28,11 @@ export function ProposalFilter() {
   useEffect(() => {
     const fetchData = async () => {
       const data = await getPendingProposals(null);
-      console.log(data)
+
       if (data != null) {
         const sortedData = data.sort(sortCriteria);
         const filtered = Filter(searchTerm, filterType, sortedData);
         setFilteredData(filtered);
-        console.log(filtered);
       }
     };
 
@@ -68,7 +67,6 @@ export function ProposalFilter() {
             <th>Title</th>
             <th>Author(s)</th>
             <th>Tags</th>
-            <th>Requester</th>
             <th>Date</th>
           </tr>
         </thead>
@@ -92,7 +90,6 @@ export function ProposalFilter() {
                     </button>
                   ))}
                 </td>
-                <td>{proposal.author}</td>
                 <td>{proposal.research.date.split("T")[0]}</td>
               </tr>
             ))

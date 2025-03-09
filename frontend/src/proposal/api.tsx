@@ -54,8 +54,6 @@ export const getProposal = async (id: number): Promise<Proposal | null> => {
 };
 
 export const submitProposal = async (proposal: Proposal): Promise<string | null> => {
-  console.log(JSON.stringify({ proposal }));
-
   try {
     const response = await fetch(`${API_URL}/submit-proposal`, {
       method: "POST",
@@ -63,6 +61,31 @@ export const submitProposal = async (proposal: Proposal): Promise<string | null>
         "Content-Type": "application/json",
       },
       body: JSON.stringify(proposal),
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Unknown error:", error);
+    return null;
+  }
+}
+
+export const giveFeedback = async (id: number, description: string, answer: boolean): Promise<string | null> => {
+  try {
+    const response = await fetch(`${API_URL}/give-feedback`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: id,
+        description: description,
+        answer: answer,
+      }),
     });
 
     if (!response.ok) {

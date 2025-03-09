@@ -17,22 +17,23 @@ public class AccountService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Account signUp(String name, String username, String email, String password, String accountType) {
+    public Account signUp(String name, String username, String email, String password, String role) {
         Optional<Account> account = accountRepository.findByUsername(username);
         String hashedPassword = passwordEncoder.encode(password);
 
         if (account.isPresent()) {
-            System.out.println("Username already exists: " + username);
+            System.err.println("Username already exists: " + username);
             return null;
         }
 
-        Account newAccount = new Account(name, username, email, hashedPassword, accountType);
+        Account newAccount = new Account(name, username, email, hashedPassword, role);
 
-        if (newAccount != null) {
-            accountRepository.save(newAccount);
-            System.out.println("Account created for username: " + username + " as " + accountType);
+        if (!accountRepository.save(newAccount).isPresent()) {
+            System.err.println("Error while saving account: " + username);
+            return null;
         }
 
+        System.out.println("Account created: " + username + " as " + role);
         return newAccount;
     }
 
@@ -44,7 +45,7 @@ public class AccountService {
             return account.get();
         }
 
-        System.out.println("Login failed for user: " + username);
+        System.err.println("Login failed for user: " + username);
         return null;
     }
 }

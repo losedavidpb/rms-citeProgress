@@ -25,35 +25,24 @@ public class AccountRepository {
     // TODO: Remove this and implement a database
     private void initUsers() {
         Account admin = new Account(
-            "Paco", "paco", "paco@mail.com",
+            "admin", "admin", "admin@mail.com",
             passwordEncoder.encode("admin123"), "Admin"
         );
 
-        Account researcher1 = new Account(
-            "David", "david", "david@mail.com",
+        Account researcher = new Account(
+            "Researcher", "researcher", "researcher@mail.com",
             passwordEncoder.encode("researcher123"), "Researcher"
         );
 
-        Account researcher2 = new Account(
-            "Laura", "laura", "laura@mail.com",
-            passwordEncoder.encode("researcher456"), "Researcher"
-        );
-
         users.put(admin.getUsername(), admin);
-        users.put(researcher1.getUsername(), researcher1);
-        users.put(researcher2.getUsername(), researcher2);
+        users.put(researcher.getUsername(), researcher);
     }
 
     public Optional<Account> findByUsername(String username) {
         return Optional.ofNullable(users.get(username));
     }
 
-    public Account save(Account user) {
-        users.put(user.getUsername(), user);
-        return user;
-    }
-
-    public Map<String, Account> getAccounts() {
-        return users;
+    public Optional<Account> save(Account user) {
+        return Optional.ofNullable(users.put(user.getUsername(), user));
     }
 }

@@ -19,18 +19,11 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private int JWT_EXPIRATION_MS;
 
-    private Key getSigningKey() {
-        byte[] keyBytes = SECRET_KEY.getBytes();
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
-
     public String generateToken(String username) {
-        return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION_MS))
-                .signWith(getSigningKey())
-                .compact();
+        Date expiration = new Date(System.currentTimeMillis() + JWT_EXPIRATION_MS);
+
+        return Jwts.builder().setSubject(username).setIssuedAt(new Date()).setExpiration(
+                expiration).signWith(getSigningKey()).compact();
     }
 
     public Boolean validateToken(String token, String username) {
@@ -52,11 +45,12 @@ public class JwtUtil {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
+    }
+
+    private Key getSigningKey() {
+        byte[] keyBytes = SECRET_KEY.getBytes();
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     private Boolean isTokenExpired(String token) {

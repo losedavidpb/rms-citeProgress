@@ -16,6 +16,12 @@ export function ProposalReview() {
 
   const numericId = Number(id);
 
+  const handleFeedback = () => {
+    localStorage.setItem("id", numericId.toString());
+    localStorage.setItem("description", proposal?.research.description ?? "");
+    navigate("/give-feedback");
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       const data = await getProposal(numericId);
@@ -87,7 +93,7 @@ export function ProposalReview() {
 
           <button
             className="btn btn-primary mt-3"
-            onClick={() => navigate("/give-feedback")}
+            onClick={() => handleFeedback()}
           >
             Give Feedback
           </button>

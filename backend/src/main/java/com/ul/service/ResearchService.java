@@ -1,6 +1,7 @@
 package com.ul.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,11 +14,11 @@ public class ResearchService {
     @Autowired
     private ResearchRepository researchRepository;
 
-    public Research getResearchById(long id) {
-        return researchRepository.findById(id);
-    }
-
     public List<Research> getAvailableResearch() {
         return researchRepository.findAll();
+    }
+
+    public Optional<Research> getResearchById(long id) {
+        return researchRepository.findById(id);
     }
 }

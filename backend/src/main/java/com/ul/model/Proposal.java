@@ -29,9 +29,22 @@ public class Proposal {
     }
 
     @Override
-    public String toString() {
-        return "Proposal [research=" + research + ", author=" + author + ", getResearch()=" + getResearch()
-                + ", getAuthor()=" + getAuthor() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
-                + ", toString()=" + super.toString() + "]";
+    public int hashCode() {
+        final int prime = 31;
+
+        int result = 1;
+        result = prime * result + ((research == null) ? 0 : research.hashCode());
+        result = prime * result + ((author == null) ? 0 : author.hashCode());
+
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Proposal) {
+            return this.hashCode() == obj.hashCode();
+        }
+
+        return false;
     }
 }

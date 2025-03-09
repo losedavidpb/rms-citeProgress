@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import "./../style/proposal.css";
 import { useCheckAccount, useCheckUserPermissions } from "../account/api";
 import { submitProposal } from "./api";
+import { useNavigate } from "react-router-dom";
 
 export function ProposalSubmission() {
   useCheckAccount();
@@ -16,6 +17,8 @@ export function ProposalSubmission() {
   const [citations, setCitations] = useState<number>(-1);
 
   const [error, setError] = useState<string>("");
+
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,7 +53,7 @@ export function ProposalSubmission() {
         },
       });
 
-      //navigate("/available-research");
+      navigate("/available-research");
     }
   };
 
