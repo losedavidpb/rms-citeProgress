@@ -1,11 +1,10 @@
-import { MouseEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export function Header() {
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
 
-  function logout(e: MouseEvent<HTMLAnchorElement, MouseEvent>) {
+  function logout(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
     e.preventDefault();
 
     localStorage.removeItem("token");
