@@ -25,13 +25,12 @@ public class ProposalRepository {
     }
 
     private void initProposals() {
-        this.proposals.put("David", Arrays.asList(2L, 3L, 5L));
-        this.proposals.put("Laura", Arrays.asList(1L, 6L, 8L));
+        this.proposals.put("david", Arrays.asList(2L, 3L, 5L));
+        this.proposals.put("laura", Arrays.asList(1L, 6L, 8L));
     }
 
     public Proposal findByID(long ID) {
         Research research = researchRepository.findById(ID);
-        System.out.println(research);
 
         if (research != null) {
             for (String author : proposals.keySet()) {
@@ -69,5 +68,20 @@ public class ProposalRepository {
         }
 
         return proposals;
+    }
+
+    public boolean addProposal(Proposal proposal) {
+        String author = proposal.getAuthor();
+
+        if (this.proposals.containsKey(author)) {
+            List<Proposal> userProposals = findByAuthor(author);
+
+            if (!userProposals.contains(proposal)) {
+                proposal.getResearch().setID(researchRepository.getLastID());
+                return userProposals.add(proposal);
+            }
+        }
+
+        return false;
     }
 }

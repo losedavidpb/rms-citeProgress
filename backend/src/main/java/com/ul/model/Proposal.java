@@ -27,4 +27,11 @@ public class Proposal {
     public void setAuthor(String author) {
         this.author = author;
     }
+
+    @Override
+    public String toString() {
+        return "Proposal [research=" + research + ", author=" + author + ", getResearch()=" + getResearch()
+                + ", getAuthor()=" + getAuthor() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
+                + ", toString()=" + super.toString() + "]";
+    }
 }

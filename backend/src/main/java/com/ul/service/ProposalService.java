@@ -24,4 +24,8 @@ public class ProposalService {
     public List<Proposal> getProposals() {
         return proposalRepository.findAll();
     }
+
+    public boolean submitProposal(Proposal proposal) {
+        return proposalRepository.addProposal(proposal);
+    }
 }
