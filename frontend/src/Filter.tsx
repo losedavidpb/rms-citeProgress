@@ -30,10 +30,16 @@ export function Filter(searchTerm: string, filterType: FilterType, data: unknown
       return false;
     },
     authors: (value: unknown, searchTerm: string) => {
-      return FilterArrayText(value, searchTerm);
+      if (Array.isArray(value)) {
+        return FilterArrayText(value, searchTerm);
+      }
+      return false;
     },
     tags: (value: unknown, searchTerm: string) => {
-      return FilterArrayText(value, searchTerm);
+      if (Array.isArray(value)) {
+        return FilterArrayText(value, searchTerm);
+      }
+      return false;
     },
     date: (value: unknown, searchTerm: string) => {
       if (typeof value == "string") {
