@@ -5,8 +5,11 @@ import "./../style/filter.css";
 
 import { Research, getAvailableResearch } from "./api";
 import { Filter, FilterType } from "../Filter";
+import { useCheckAccount } from "../account/api";
 
 export function AvailableResearch() {
+  useCheckAccount();
+
   const [filteredData, setFilteredData] = useState<Research[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filterType, setFilterType] = useState<FilterType>("title");
@@ -19,12 +22,6 @@ export function AvailableResearch() {
   const sortCriteria = (a: Research, b: Research) => {
     return b.citations - a.citations;
   };
-
-  useEffect(() => {
-    if (localStorage.getItem("username") == null) {
-      navigate("/");
-    }
-  })
 
   useEffect(() => {
     const fetchData = async () => {

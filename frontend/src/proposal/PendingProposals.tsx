@@ -5,8 +5,12 @@ import "./../style/filter.css";
 
 import { getPendingProposals, Proposal } from "./api";
 import { Filter, FilterType } from "../Filter";
+import { useCheckAccount, useCheckUserPermissions } from "../account/api";
 
 export function PendingProposals() {
+  useCheckAccount();
+  useCheckUserPermissions("Researcher");
+
   const [filteredData, setFilteredData] = useState<Proposal[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filterType, setFilterType] = useState<FilterType>("title");
@@ -22,16 +26,6 @@ export function PendingProposals() {
       new Date(b.research.date).getTime() - new Date(a.research.date).getTime()
     );
   };
-
-  useEffect(() => {
-    if (localStorage.getItem("username") == null) {
-      navigate("/");
-    }
-
-    if (localStorage.getItem("role") !== "Researcher") {
-      navigate("/available-research");
-    }
-  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -103,7 +97,7 @@ export function PendingProposals() {
                     </button>
                   ))}
                 </td>
-                <td>{proposal.author.name}</td>
+                <td>{proposal.author}</td>
                 <td>{proposal.research.date.split("T")[0]}</td>
               </tr>
             ))

@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-// TODO: Replace this with backend handling
-//import { accountList } from "./api";
-import { logIn } from "./api";
+import { logIn, useCheckAccount } from "./api";
 
 export function Login() {
+  useCheckAccount();
+
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
@@ -27,13 +27,6 @@ export function Login() {
       navigate("/available-research");
     });
   };
-
-  useEffect(() => {
-    if (localStorage.getItem("username") !== null) {
-      setError("");
-      navigate("/available-research");
-    }
-  }, [navigate]);
 
   return (
     <div className="tab-content">

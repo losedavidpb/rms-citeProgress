@@ -5,8 +5,12 @@ import "./../style/filter.css";
 
 import { getPendingProposals, Proposal } from "./api";
 import { Filter, FilterType } from "../Filter";
+import { useCheckAccount, useCheckUserPermissions } from "../account/api";
 
 export function ProposalFilter() {
+  useCheckAccount();
+  useCheckUserPermissions("Admin");
+
   const [filteredData, setFilteredData] = useState<Proposal[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filterType, setFilterType] = useState<FilterType>("title");
@@ -22,20 +26,14 @@ export function ProposalFilter() {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("username") == null) {
-      navigate("/");
-    }
-  });
-
-  useEffect(() => {
     const fetchData = async () => {
       const data = await getPendingProposals(null);
-
+      console.log(data)
       if (data != null) {
         const sortedData = data.sort(sortCriteria);
         const filtered = Filter(searchTerm, filterType, sortedData);
         setFilteredData(filtered);
-        console.log(filtered)
+        console.log(filtered);
       }
     };
 
@@ -94,7 +92,7 @@ export function ProposalFilter() {
                     </button>
                   ))}
                 </td>
-                <td>{proposal.author.name}</td>
+                <td>{proposal.author}</td>
                 <td>{proposal.research.date.split("T")[0]}</td>
               </tr>
             ))

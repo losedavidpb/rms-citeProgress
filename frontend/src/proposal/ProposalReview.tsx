@@ -1,28 +1,20 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-// TODO: this must be located in a database
 import { Proposal, getProposal } from "./api";
+import { useCheckAccount, useCheckUserPermissions } from "../account/api";
 
 export function ProposalReview() {
+  useCheckAccount();
+  useCheckUserPermissions("Admin");
+
   const [error, setError] = useState<string>("");
   const [proposal, setProposal] = useState<Proposal | undefined>(undefined);
   const { id } = useParams<{ id: string }>();
 
   const navigate = useNavigate();
 
-  // Convert the id to a number
   const numericId = Number(id);
-
-  useEffect(() => {
-    if (localStorage.getItem("username") == null) {
-      navigate("/");
-    }
-
-    if (localStorage.getItem("role") !== "Admin") {
-      navigate("/available-research");
-    }
-  });
 
   useEffect(() => {
     const fetchData = async () => {

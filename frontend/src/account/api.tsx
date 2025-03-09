@@ -1,20 +1,26 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 const API_URL = "http://localhost:8080/api/account";
 
 export interface User {
-  name: string,
-  email: string,
-  password: string,
-  role: string
+  name: string;
+  email: string;
+  password: string;
+  role: string;
 }
 
-export const logIn = async (username: string, password: string): Promise<User | null> => {
+export const logIn = async (
+  username: string,
+  password: string
+): Promise<User | null> => {
   try {
     const response = await fetch(`${API_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ username, password }),
     });
 
     if (!response.ok) {
@@ -22,8 +28,6 @@ export const logIn = async (username: string, password: string): Promise<User | 
     }
 
     const data = await response.json();
-
-    console.log(data);
 
     // Store account details in local storage
     if (data.token) {
@@ -39,7 +43,13 @@ export const logIn = async (username: string, password: string): Promise<User | 
   }
 };
 
-export const signUp = async (name: string, username: string, email: string, password: string, accountType: string): Promise<User | null> => {
+export const signUp = async (
+  name: string,
+  username: string,
+  email: string,
+  password: string,
+  accountType: string
+): Promise<User | null> => {
   try {
     const response = await fetch(`${API_URL}/signup`, {
       method: "POST",
@@ -64,4 +74,24 @@ export const signUp = async (name: string, username: string, email: string, pass
     console.error("Signup error:", error);
     return null;
   }
+};
+
+export const useCheckAccount = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("username") === null) {
+      navigate("/");
+    }
+  }, [navigate]);
+};
+
+export const useCheckUserPermissions = (role: string) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("role") !== role) {
+      navigate("/available-research");
+    }
+  });
 };

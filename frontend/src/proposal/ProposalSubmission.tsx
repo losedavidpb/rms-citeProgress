@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 
 import "./../style/proposal.css";
+import { useCheckAccount, useCheckUserPermissions } from "../account/api";
+import { submitProposal } from "./api";
 
 export function ProposalSubmission() {
-  const navigate = useNavigate();
+  useCheckAccount();
+  useCheckUserPermissions("Researcher");
 
   const [title, setTitle] = useState<string>("");
   const [authors, setAuthors] = useState<string>("");
@@ -18,36 +20,39 @@ export function ProposalSubmission() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!title || !authors || !tags || !description || date == undefined || citations < 0 ) {
-      setError("Please fill out all fields");
-      return;
+    const author = localStorage.getItem("username");
+
+    if (author) {
+      if (!title || !authors || !tags || !description || date == undefined || citations < 0) {
+        setError("Please fill out all fields");
+        return;
+      }
+
+      setError("");
+      setTitle("");
+      setAuthors("");
+      setTags("");
+      setDescription("");
+      setDate(new Date());
+      setCitations(-1);
+
+      submitProposal({
+        author: author,
+        research: {
+          id: -1,
+          title: title,
+          description: description,
+          authors: authors.split(","),
+          tags: tags.split(","),
+          status: "Under Review",
+          date: date.toISOString().split("T")[0],
+          citations: citations,
+        },
+      });
+
+      //navigate("/available-research");
     }
-
-    // TODO: Submit the proposal to the backend
-    // ....
-
-    // Reset form data
-    setError("");
-    setTitle("");
-    setAuthors("");
-    setTags("");
-    setDescription("");
-    setDate(new Date());
-    setCitations(-1);
-
-    // Simulate a backend call and navigate to another page
-    navigate("/available-research");
   };
-
-  useEffect(() => {
-    if (localStorage.getItem("username") == null) {
-      navigate("/");
-    }
-
-    if (localStorage.getItem("role") !== "Researcher") {
-      navigate("/available-research");
-    }
-  });
 
   return (
     <div className="form-container">

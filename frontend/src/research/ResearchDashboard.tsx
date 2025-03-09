@@ -1,22 +1,17 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { Research, getResearch } from "./api";
+import { useCheckAccount } from "../account/api";
 
 export function ResearchDashboard() {
+  useCheckAccount();
+
   const [error, setError] = useState<string>("");
   const [research, setResearch] = useState<Research | undefined>(undefined);
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
 
-  // Convert the id to a number
   const numericId = Number(id);
-
-  useEffect(() => {
-    if (localStorage.getItem("username") == null) {
-      navigate("/");
-    }
-  });
 
   useEffect(() => {
     const fetchData = async () => {

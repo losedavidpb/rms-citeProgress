@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signUp } from "./api";
+import { signUp, useCheckAccount } from "./api";
 
 export function SignUp() {
+  useCheckAccount();
+
   const [name, setName] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -36,13 +38,6 @@ export function SignUp() {
       navigate("/");
     });
   };
-
-  useEffect(() => {
-    if (localStorage.getItem("username") !== null) {
-      setError("");
-      navigate("/available-research");
-    }
-  }, [navigate]);
 
   return (
     <div className="tab-content">
@@ -132,15 +127,26 @@ export function SignUp() {
             I have read and agree to the terms
           </label>
         </div>
+        <div>
+          <button
+            type="submit"
+            data-mdb-button-init
+            data-mdb-ripple-init
+            className="btn btn-primary me-3"
+            onClick={() => navigate("/")}
+          >
+            Go Back
+          </button>
 
-        <button
-          type="submit"
-          data-mdb-button-init
-          data-mdb-ripple-init
-          className="btn btn-primary btn-block mb-3"
-        >
-          Sign in
-        </button>
+          <button
+            type="submit"
+            data-mdb-button-init
+            data-mdb-ripple-init
+            className="btn btn-primary"
+          >
+            Sign in
+          </button>
+        </div>
       </form>
     </div>
   );
