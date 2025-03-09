@@ -16,8 +16,8 @@ public class Research {
     private Date date;
     private int citations;
 
-    public Research(long iD, String title, String description, List<String> authors, List<String> tags, String status, Date date, int citations) {
-        ID = iD;
+    public Research(long ID, String title, String description, List<String> authors, List<String> tags, String status, Date date, int citations) {
+        this.ID = ID;
         this.title = title;
         this.description = description;
         this.authors = authors;
