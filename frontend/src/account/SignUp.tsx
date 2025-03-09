@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signUp, useCheckAccount } from "./api";
+import { signUp, useCheckNotSession } from "./api";
 
 export function SignUp() {
-  useCheckAccount();
+  useCheckNotSession();
 
   const [name, setName] = useState<string>("");
   const [username, setUsername] = useState<string>("");
@@ -40,114 +40,115 @@ export function SignUp() {
   };
 
   return (
-    <div className="tab-content">
-      {error && <div className="alert alert-danger">{error}</div>}
+    <div className="container-fluid vh-100 d-flex justify-content-center align-items-center">
+      <div className="bg-white shadow rounded p-5" style={{ width: "450px" }}>
+        <h1 className="pb-4 text-center">Sign Up</h1>
+        {error && <div className="alert alert-danger">{error}</div>}
 
-      <form onSubmit={checkSignUp}>
-        <div data-mdb-input-init className="form-outline mb-4">
-          <label className="form-label" htmlFor="registerName">
-            Name
-          </label>
-          <input
-            type="text"
-            id="registerName"
-            className="form-control"
-            value={name}
-            required
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
+        <form onSubmit={checkSignUp}>
+          {/* Name & Username */}
+          <div className="row mb-4">
+            <div className="col-md-6">
+              <label className="form-label" htmlFor="registerName">
+                Name
+              </label>
+              <input
+                type="text"
+                id="registerName"
+                className="form-control"
+                value={name}
+                required
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+            <div className="col-md-6">
+              <label className="form-label" htmlFor="registerUsername">
+                Username
+              </label>
+              <input
+                type="text"
+                id="registerUsername"
+                className="form-control"
+                value={username}
+                required
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
+          </div>
 
-        <div data-mdb-input-init className="form-outline mb-4">
-          <label className="form-label" htmlFor="registerUsername">
-            Username
-          </label>
-          <input
-            type="text"
-            id="registerUsername"
-            className="form-control"
-            value={username}
-            required
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
+          {/* Email Field */}
+          <div className="mb-4">
+            <label className="form-label" htmlFor="registerEmail">
+              Email
+            </label>
+            <input
+              type="email"
+              id="registerEmail"
+              className="form-control"
+              value={email}
+              required
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
 
-        <div data-mdb-input-init className="form-outline mb-4">
-          <label className="form-label" htmlFor="registerEmail">
-            Email
-          </label>
-          <input
-            type="email"
-            id="registerEmail"
-            className="form-control"
-            value={email}
-            required
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
+          {/* Password & Repeat Password */}
+          <div className="row mb-4">
+            <div className="col-md-6">
+              <label className="form-label" htmlFor="registerPassword">
+                Password
+              </label>
+              <input
+                type="password"
+                id="registerPassword"
+                className="form-control"
+                value={password}
+                required
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div className="col-md-6">
+              <label className="form-label" htmlFor="registerRepeatPassword">
+                Repeat Password
+              </label>
+              <input
+                type="password"
+                id="registerRepeatPassword"
+                className="form-control"
+                value={repeatPassword}
+                required
+                onChange={(e) => setRepeatPassword(e.target.value)}
+              />
+            </div>
+          </div>
 
-        <div data-mdb-input-init className="form-outline mb-4">
-          <label className="form-label" htmlFor="registerPassword">
-            Password
-          </label>
-          <input
-            type="password"
-            id="registerPassword"
-            className="form-control"
-            value={password}
-            required
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
+          {/* Terms Checkbox */}
+          <div className="form-check d-flex justify-content-center mb-4">
+            <input
+              className="form-check-input me-2"
+              type="checkbox"
+              id="registerCheck"
+              onChange={(e) => setTerms(e.target.checked)}
+            />
+            <label className="form-check-label" htmlFor="registerCheck">
+              I have read and agree to the terms
+            </label>
+          </div>
 
-        <div data-mdb-input-init className="form-outline mb-4">
-          <label className="form-label" htmlFor="registerRepeatPassword">
-            Repeat password
-          </label>
-          <input
-            type="password"
-            id="registerRepeatPassword"
-            className="form-control"
-            value={repeatPassword}
-            required
-            onChange={(e) => setRepeatPassword(e.target.value)}
-          />
-        </div>
-
-        <div className="form-check d-flex justify-content-center mb-4">
-          <input
-            className="form-check-input me-2"
-            type="checkbox"
-            value=""
-            id="registerCheck"
-            aria-describedby="registerCheckHelpText"
-            onChange={(e) => setTerms(e.target.checked)}
-          />
-          <label className="form-check-label" htmlFor="registerCheck">
-            I have read and agree to the terms
-          </label>
-        </div>
-        <div>
-          <button
-            type="submit"
-            data-mdb-button-init
-            data-mdb-ripple-init
-            className="btn btn-primary me-3"
-            onClick={() => navigate("/")}
-          >
-            Go Back
-          </button>
-
-          <button
-            type="submit"
-            data-mdb-button-init
-            data-mdb-ripple-init
-            className="btn btn-primary"
-          >
-            Sign in
-          </button>
-        </div>
-      </form>
+          {/* Buttons */}
+          <div className="d-flex justify-content-between">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => navigate("/")}
+            >
+              Go Back
+            </button>
+            <button type="submit" className="btn btn-primary">
+              Sign Up
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

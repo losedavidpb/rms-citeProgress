@@ -1,10 +1,13 @@
+import { MouseEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export function Header() {
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
 
-  function logout() {
+  function logout(e: MouseEvent<HTMLAnchorElement, MouseEvent>) {
+    e.preventDefault();
+
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     localStorage.removeItem("role");
@@ -13,7 +16,7 @@ export function Header() {
 
   return (
     <header className="header">
-      <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+      <nav className="navbar navbar-expand-lg">
         <div className="container-fluid">
           <Link to="/available-research" className="navbar-brand">
             CiteProgress
@@ -64,9 +67,9 @@ export function Header() {
                 </li>
               )}
               <li className="nav-item">
-                <button className="nav-link" onClick={() => logout()}>
+                <Link to="#" className="nav-link" onClick={(e) => logout(e)}>
                   Log Out
-                </button>
+                </Link>
               </li>
             </ul>
           </div>

@@ -66,15 +66,30 @@ export const signUp = async (name: string, username: string, email: string, pass
   }
 };
 
-export const useCheckAccount = () => {
+
+const isLogged = (): boolean => {
+  return (
+    localStorage.getItem("username") !== null &&
+    localStorage.getItem("token") !== null &&
+    localStorage.getItem("role") !== null
+  );
+}
+
+export const useCheckSession = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("username") === null) {
-      navigate("/");
-    }
+    if (!isLogged()) navigate("/");
   }, [navigate]);
 };
+
+export const useCheckNotSession = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLogged()) navigate(-1);
+  }, [navigate]);
+}
 
 export const useCheckUserPermissions = (role: string) => {
   const navigate = useNavigate();

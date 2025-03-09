@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import "./../style/filter.css";
-
 import { getPendingProposals, Proposal } from "./api";
 import { Filter, FilterType } from "../Filter";
-import { useCheckAccount, useCheckUserPermissions } from "../account/api";
+import { useCheckSession, useCheckUserPermissions } from "../account/api";
 
 export function ProposalFilter() {
-  useCheckAccount();
+  useCheckSession();
   useCheckUserPermissions("Admin");
 
   const [filteredData, setFilteredData] = useState<Proposal[]>([]);
@@ -40,7 +38,7 @@ export function ProposalFilter() {
   }, [searchTerm, filterType]);
 
   return (
-    <>
+    <div className="container bg-white shadow rounded">
       <div className="search-container">
         <input
           type="text"
@@ -94,12 +92,12 @@ export function ProposalFilter() {
               </tr>
             ))
           ) : (
-            <tr>
+            <tr className="container">
               <td colSpan={4}>No matching proposals found.</td>
             </tr>
           )}
         </tbody>
       </table>
-    </>
+    </div>
   );
 }

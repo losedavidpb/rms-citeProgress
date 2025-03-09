@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 
-import "./../style/proposal.css";
-import { useCheckAccount, useCheckUserPermissions } from "../account/api";
+import { useCheckSession, useCheckUserPermissions } from "../account/api";
 import { submitProposal } from "./api";
 import { useNavigate } from "react-router-dom";
 
 export function ProposalSubmission() {
-  useCheckAccount();
+  useCheckSession();
   useCheckUserPermissions("Researcher");
 
   const [title, setTitle] = useState<string>("");
@@ -16,8 +15,6 @@ export function ProposalSubmission() {
   const [date, setDate] = useState<Date>(new Date());
   const [citations, setCitations] = useState<number>(-1);
 
-  const [error, setError] = useState<string>("");
-
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -26,19 +23,6 @@ export function ProposalSubmission() {
     const author = localStorage.getItem("username");
 
     if (author) {
-      if (!title || !authors || !tags || !description || date == undefined || citations < 0) {
-        setError("Please fill out all fields");
-        return;
-      }
-
-      setError("");
-      setTitle("");
-      setAuthors("");
-      setTags("");
-      setDescription("");
-      setDate(new Date());
-      setCitations(-1);
-
       submitProposal({
         author: author,
         research: {
@@ -58,95 +42,112 @@ export function ProposalSubmission() {
   };
 
   return (
-    <div className="form-container">
-      <h2 className="pb-4">Proposal Submission</h2>
-      <form onSubmit={handleSubmit}>
-        {/* Title Field */}
-        <div className="form-field">
-          <label htmlFor="title">Title</label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-          {error && <span className="error">{error}</span>}
-        </div>
+    <div className="container-fluid d-flex justify-content-center align-items-center" style={{paddingTop: 70}}>
+      <div className="w-75 h-100 p-4 bg-white shadow rounded">
+        <h1 className="pb-4 text-center">Proposal Submission</h1>
+        <form onSubmit={handleSubmit} className="h-100 d-flex flex-column">
+          {/* Title Field */}
+          <div className="mb-3">
+            <label htmlFor="title" className="form-label">
+              Title
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="title"
+              name="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+          </div>
 
-        {/* Authors Field */}
-        <div className="form-field">
-          <label htmlFor="authors">Authors</label>
-          <input
-            type="text"
-            id="authors"
-            name="authors"
-            value={authors}
-            onChange={(e) => setAuthors(e.target.value)}
-            required
-          />
-          {error && <span className="error">{error}</span>}
-        </div>
+          {/* Authors and Tags in One Row */}
+          <div className="row mb-3">
+            <div className="col-md-6">
+              <label htmlFor="authors" className="form-label">
+                Authors
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="authors"
+                name="authors"
+                value={authors}
+                onChange={(e) => setAuthors(e.target.value)}
+                required
+              />
+            </div>
+            <div className="col-md-6">
+              <label htmlFor="tags" className="form-label">
+                Tags
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="tags"
+                name="tags"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+                required
+              />
+            </div>
+          </div>
 
-        {/* Tags Field */}
-        <div className="form-field">
-          <label htmlFor="tags">Tags</label>
-          <input
-            type="text"
-            id="tags"
-            name="tags"
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
-            required
-          />
-          {error && <span className="error">{error}</span>}
-        </div>
+          {/* Citations and Date */}
+          <div className="row mb-3">
+            <div className="col-md-6">
+              <label htmlFor="citations" className="form-label">
+                Citations
+              </label>
+              <input
+                type="number"
+                className="form-control"
+                id="citations"
+                name="citations"
+                value={citations}
+                onChange={(e) => setCitations(Number(e.target.value))}
+                min="0"
+                required
+              />
+            </div>
+            <div className="col-md-6">
+              <label htmlFor="date" className="form-label">
+                Date of Research
+              </label>
+              <input
+                type="date"
+                className="form-control"
+                id="date"
+                name="date"
+                value={date.toISOString().split("T")[0]}
+                onChange={(e) => setDate(new Date(e.target.value))}
+                required
+              />
+            </div>
+          </div>
 
-        {/* Description Field */}
-        <div className="form-field">
-          <label htmlFor="description">Description</label>
-          <textarea
-            id="description"
-            name="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-          {error && <span className="error">{error}</span>}
-        </div>
+          {/* Description Field */}
+          <div className="mb-3">
+            <label htmlFor="description" className="form-label">
+              Description
+            </label>
+            <textarea
+              className="form-control h-100"
+              id="description"
+              name="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+            ></textarea>
+          </div>
 
-        {/* Date Field */}
-        <div className="form-field">
-          <label htmlFor="date">Date of Research</label>
-          <input
-            type="date"
-            id="date"
-            name="date"
-            value={date.toISOString().split("T")[0]}
-            onChange={(e) => setDate(new Date(e.target.value))}
-            required
-          />
-          {error && <span className="error">{error}</span>}
-        </div>
-
-        {/* Citations Field */}
-        <div className="form-field">
-          <label htmlFor="citations">Citations</label>
-          <input
-            type="number"
-            id="citations"
-            name="citations"
-            value={citations}
-            onChange={(e) => setCitations(Number(e.target.value))}
-            min="0"
-            required
-          />
-        </div>
-
-        {/* Submit Button */}
-        <button type="submit">Submit Proposal</button>
-      </form>
+          {/* Submit Button */}
+          <button type="submit" className="btn btn-primary w-100 mt-4">
+            Submit Proposal
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

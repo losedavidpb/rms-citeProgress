@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import "./../style/filter.css";
-
 import { getPendingProposals, Proposal } from "./api";
 import { Filter, FilterType } from "../Filter";
-import { useCheckAccount, useCheckUserPermissions } from "../account/api";
+import { useCheckSession, useCheckUserPermissions } from "../account/api";
 
 export function PendingProposals() {
-  useCheckAccount();
+  useCheckSession();
   useCheckUserPermissions("Researcher");
 
   const [filteredData, setFilteredData] = useState<Proposal[]>([]);
@@ -46,7 +44,7 @@ export function PendingProposals() {
   }, [searchTerm, filterType]);
 
   return (
-    <>
+    <div className="container bg-white shadow rounded">
       <div className="search-container">
         <input
           type="text"
@@ -108,6 +106,6 @@ export function PendingProposals() {
           )}
         </tbody>
       </table>
-    </>
+    </div>
   );
 }

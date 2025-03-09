@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import "./../style/filter.css";
-
 import { Research, getAvailableResearch } from "./api";
 import { Filter, FilterType } from "../Filter";
-import { useCheckAccount } from "../account/api";
+import { useCheckSession } from "../account/api";
 
 export function AvailableResearch() {
-  useCheckAccount();
+  useCheckSession();
 
   const [filteredData, setFilteredData] = useState<Research[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -38,8 +36,8 @@ export function AvailableResearch() {
   }, [searchTerm, filterType]);
 
   return (
-    <>
-      <div className="search-container">
+    <div className="container bg-white shadow rounded">
+      <div className="search-container container-fluid">
         <input
           type="text"
           value={searchTerm}
@@ -78,7 +76,6 @@ export function AvailableResearch() {
               <tr
                 key={research.id}
                 onClick={() => handleTitleClick(research.id)}
-                className="button-research"
               >
                 <td>{research.title}</td>
                 <td>{research.authors}</td>
@@ -104,6 +101,6 @@ export function AvailableResearch() {
           )}
         </tbody>
       </table>
-    </>
+    </div>
   );
 }

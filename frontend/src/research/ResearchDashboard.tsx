@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { Research, getResearch } from "./api";
-import { useCheckAccount } from "../account/api";
+import { useCheckSession } from "../account/api";
 
 export function ResearchDashboard() {
-  useCheckAccount();
+  useCheckSession();
 
   const [error, setError] = useState<string>("");
   const [research, setResearch] = useState<Research | undefined>(undefined);
@@ -27,9 +27,8 @@ export function ResearchDashboard() {
   }, [numericId]);
 
   return (
-    <div className="container my-5">
-      <h1 className="text-center mb-4">Research Dashboard</h1>
-
+    <div className="container my-5 bg-white shadow rounded">
+      <h1 className="text-center pt-3 mb-4">Research Dashboard</h1>
       {error && <div className="alert alert-danger">{error}</div>}
 
       {research ? (

@@ -1,6 +1,8 @@
 package com.ul.repository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,34 @@ public class ProposalRepository {
 
     public ProposalRepository() {
         this.proposals = new HashMap<>();
+        initProposals();
+    }
+
+    private void initProposals() {
+        Research research1 = new Research(1L,
+            "Deep Learning in Medical Imaging",
+            "Exploring deep learning techniques for enhanced medical image analysis.",
+            Arrays.asList("Alice Smith", "Bob Johnson"),
+            Arrays.asList("Deep Learning", "Medical Imaging"),
+            "Under Review",
+            new Date(), 150
+        );
+
+        Research research2 = new Research(2L,
+            "AI in Finance",
+            "Analyzing the applications of artificial intelligence in the financial sector.",
+            Arrays.asList("Charlie Brown", "David Wilson"),
+            Arrays.asList("Artificial Intelligence", "Finance"),
+            "Published",
+            new Date(), 350
+        );
+
+        Proposal proposal1 = new Proposal(research1, "Researcher");
+        Proposal proposal2 = new Proposal(research2, "Researcher");
+
+        proposals.putIfAbsent("researcher", new ArrayList<>());
+        proposals.get("researcher").add(proposal1);
+        proposals.get("researcher").add(proposal2);
     }
 
     public List<Proposal> findAll() {

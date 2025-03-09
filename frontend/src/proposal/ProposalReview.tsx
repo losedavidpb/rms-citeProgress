@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { Proposal, getProposal } from "./api";
-import { useCheckAccount, useCheckUserPermissions } from "../account/api";
+import { useCheckSession, useCheckUserPermissions } from "../account/api";
 
 export function ProposalReview() {
-  useCheckAccount();
+  useCheckSession();
   useCheckUserPermissions("Admin");
 
   const [error, setError] = useState<string>("");
@@ -36,7 +36,7 @@ export function ProposalReview() {
   }, [numericId]);
 
   return (
-    <div className="container my-5">
+    <div className="container my-5 bg-white shadow rounded">
       <h1 className="text-center mb-4">Review Proposal</h1>
 
       {error && <div className="alert alert-danger">{error}</div>}
@@ -89,14 +89,14 @@ export function ProposalReview() {
             <div className="d-flex align-items-center">
               <p className="mb-0">{proposal.research.description}</p>
             </div>
-          </div>
 
-          <button
-            className="btn btn-primary mt-3"
-            onClick={() => handleFeedback()}
-          >
-            Give Feedback
-          </button>
+            <button
+              className="btn btn-primary mt-3"
+              onClick={() => handleFeedback()}
+            >
+              Give Feedback
+            </button>
+          </div>
         </div>
       ) : (
         <div className="alert alert-warning mt-3">
